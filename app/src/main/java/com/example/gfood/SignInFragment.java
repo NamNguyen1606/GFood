@@ -18,10 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gfood.retrofit2.model.Account;
+import com.example.gfood.retrofit2.model.Password;
 import com.example.gfood.retrofit2.model.Token;
 import com.example.gfood.retrofit2.service.APIService;
 import com.example.gfood.retrofit2.service.APIutils;
 
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,6 +79,34 @@ public class SignInFragment extends Fragment {
 
                 // Post request
                 mAPIServer = APIutils.getAPIService();
+
+//                //change password
+//                String token ="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTY5MDExMjgxLCJqdGkiOiJmN2MyZjVkYzU0YmE0ZmY4YTJhZTdlZTgzOGY5ZTFkMSIsInVzZXJfaWQiOjQsInR5cGUiOiJjdXN0b21lciJ9.TSFK7PyIp8GtqVxBDLWdEeo_Bh_iRhboHySsIZx99DU";
+//                Log.e("ACCESS", token);
+//                Password password1 = new Password("nam1606", "namnam");
+//                mAPIServer.changePassword(token,password1).enqueue(new Callback<ResponseBody>() {
+//                    @Override
+//                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                        if(response.isSuccessful()){
+//                            Log.e("ACCESS", "sucessful");
+//                            try {
+//                                Log.e("Messeger", response.body().string());
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                        } else {
+//                            Log.e("ACCESS", "false");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                        Log.e("ERROR", t.getMessage());
+//                    }
+//                });
+
+
+
                 mAPIServer.login(username,password).enqueue(new Callback<Token>() {
                     @Override
                     public void onResponse(Call<Token> call, Response<Token> response) {
@@ -85,6 +117,7 @@ public class SignInFragment extends Fragment {
                             Intent intent = new Intent(getActivity(), HomePageActivity.class);
                             startActivity(intent);
                             getActivity().finish();
+
                         } catch (Exception e){
                             Toast.makeText(getActivity(), "The username or password is incorrect", Toast.LENGTH_SHORT).show();
                         }

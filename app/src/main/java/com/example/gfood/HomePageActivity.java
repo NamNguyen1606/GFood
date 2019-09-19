@@ -30,7 +30,7 @@ public class HomePageActivity extends AppCompatActivity {
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new HomeFragment());
         fragmentList.add(new CartFragment());
-        fragmentList.add(new CartFragment());
+        fragmentList.add(new ProfileFragment());
 
         tabLayout.initialize(viewPager, getSupportFragmentManager(), fragmentList, savedInstanceState);
 
