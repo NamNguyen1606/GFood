@@ -8,14 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.gfood.Food;
-import com.example.gfood.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class FoodAdapter extends BaseAdapter {
-    public FoodAdapter(Context context, int foodLayout, List<Food> foodList) {
+public class RestaurantAdapter extends BaseAdapter {
+    public RestaurantAdapter(Context context, int foodLayout, List<Food> foodList) {
         this.context = context;
         this.foodLayout = foodLayout;
         this.foodList = foodList;
@@ -45,15 +43,15 @@ public class FoodAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(foodLayout, null);
 
-        TextView tv_name = (TextView) view.findViewById(R.id.tv_foodName);
-        TextView tv_adress = (TextView) view.findViewById(R.id.tv_adress);
-        ImageView imageView = view.findViewById(R.id.img_food);
+        TextView tvResName = (TextView) view.findViewById(R.id.tvResName);
+        TextView tvResAdress = (TextView) view.findViewById(R.id.tvResAdress);
+        ImageView imgRes = view.findViewById(R.id.imgRes);
 
         Food food = foodList.get(i);
 
-        tv_name.setText(food.getNameFood());
-        tv_adress.setText(food.getAdress());
-        Picasso.with(context).load(food.getFoodPictureUrl()).into(imageView);
+        tvResName.setText(food.getNameFood());
+        tvResAdress.setText(food.getAdress());
+        Picasso.with(context).load(food.getFoodPictureUrl()).into(imgRes);
 
         return view;
     }

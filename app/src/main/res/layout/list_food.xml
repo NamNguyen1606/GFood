@@ -3,27 +3,27 @@
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <ImageView
-        android:id="@+id/img_food"
+        android:id="@+id/imgRes"
         android:layout_width="150dp"
         android:layout_height="100dp"
         android:scaleType="fitXY"
         android:padding="10dp"/>
     <TextView
-        android:id="@+id/tv_foodName"
+        android:id="@+id/tvResName"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_toRightOf="@+id/img_food"
+        android:layout_toRightOf="@+id/imgRes"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
-        android:id="@+id/tv_adress"
+        android:id="@+id/tvResAdress"
         android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/img_food"
-        android:layout_below="@id/tv_foodName"
+        android:layout_toRightOf="@id/imgRes"
+        android:layout_below="@id/tvResName"
         android:layout_marginLeft="5dp"
         />
 </RelativeLayout>

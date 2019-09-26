@@ -69,7 +69,9 @@ public class SignInFragment extends Fragment {
                 setFragment(new SignUpFragment());
             }
         });
-
+        Intent intent = new Intent(getActivity(), HomePageActivity.class);
+        startActivity(intent);
+        getActivity().finish();;
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
