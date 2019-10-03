@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_weight="100"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/imgProd"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_weight="30"
+        android:padding="10dp"
+        android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_weight="40"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvProdName"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="12"
+            android:textColor="#E6020202"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvProdDetail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="18"
+            android:textColor="#2C2C2C"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvProdPrice"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="10"
+            android:textColor="#FF0B0B"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_weight="20"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edtProdQuantiny"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="11"
+            android:gravity="center"
+            android:inputType="number"
+            android:text="1"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btnProdAdd"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="9"
+            android:text="Add"
+            android:textSize="15sp"
+            android:background="#C35B7ED8"
+            android:layout_marginBottom="7dp"/>
+
+
+    </LinearLayout>
+</LinearLayout>
