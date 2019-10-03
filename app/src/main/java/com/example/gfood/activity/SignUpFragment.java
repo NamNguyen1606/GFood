@@ -1,4 +1,4 @@
-package com.example.gfood;
+package com.example.gfood.activity;
 
 
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.gfood.R;
 import com.example.gfood.retrofit2.model.Account;
 import com.example.gfood.retrofit2.model.Token;
 import com.example.gfood.retrofit2.service.APIService;

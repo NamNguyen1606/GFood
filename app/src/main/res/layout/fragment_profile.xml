@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_weight="100"
     android:orientation="vertical"
-    tools:context=".ProfileFragment">
+    tools:context=".activity.ProfileFragment">
 
     <FrameLayout
         android:layout_width="match_parent"

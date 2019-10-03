@@ -2,6 +2,7 @@ package com.example.gfood.retrofit2.service;
 
 import com.example.gfood.retrofit2.model.Account;
 import com.example.gfood.retrofit2.model.Password;
+import com.example.gfood.retrofit2.model.Product;
 import com.example.gfood.retrofit2.model.Restaurant;
 import com.example.gfood.retrofit2.model.Token;
 
@@ -14,6 +15,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Url;
 
 public interface APIService {
 
@@ -37,6 +39,11 @@ public interface APIService {
     // Get list restaurant
     @GET("api/restaurant/")
     Call<Restaurant> getListRestaurant();
+
+    // Get list Product
+
+    @GET
+    Call<Product> getlListProduct(@Url String url);
 
 }
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_weight="100"
     android:orientation="vertical"
-    tools:context=".HomeFragment">
+    tools:context=".activity.HomeFragment">
 
     // Search
 
@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6"
-        android:background="#D6D6D6"
+        android:background="#E2E8F3F8"
         android:orientation="horizontal">
 
         <TextView
@@ -47,7 +47,9 @@
             android:layout_weight="3"
             android:gravity="center"
             android:text="Food"
-            android:textSize="25sp" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:background="@drawable/ripple_effect_raise"/>
 
         <TextView
             android:id="@+id/fragHome_search_tvRestaurantTab"
@@ -56,7 +58,9 @@
             android:layout_weight="3"
             android:gravity="center"
             android:text="Restaurant"
-            android:textSize="25sp" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:background="@drawable/ripple_effect_raise"/>
 
     </LinearLayout>
 
@@ -69,17 +73,17 @@
         android:layout_height="0dp"
         android:layout_weight="86">
 
+        <ListView
+            android:id="@+id/fragHome_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteY="8dp" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         </ScrollView>
-
-        <ListView
-            android:id="@+id/fragHome_lvfood"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteY="8dp" />
 
     </RelativeLayout>
 

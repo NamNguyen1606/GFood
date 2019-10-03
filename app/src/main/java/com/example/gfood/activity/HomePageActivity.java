@@ -1,4 +1,4 @@
-package com.example.gfood;
+package com.example.gfood.activity;
 
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
@@ -6,9 +6,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.Toast;
+
+import com.example.gfood.R;
 
 import java.util.ArrayList;
 import java.util.List;

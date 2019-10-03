@@ -1,4 +1,4 @@
-package com.example.gfood;
+package com.example.gfood.activity;
 
 
 import android.content.Intent;
@@ -17,15 +17,12 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gfood.R;
 import com.example.gfood.retrofit2.model.Account;
-import com.example.gfood.retrofit2.model.Password;
 import com.example.gfood.retrofit2.model.Token;
 import com.example.gfood.retrofit2.service.APIService;
 import com.example.gfood.retrofit2.service.APIutils;
 
-import java.io.IOException;
-
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
