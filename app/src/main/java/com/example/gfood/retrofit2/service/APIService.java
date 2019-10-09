@@ -41,9 +41,7 @@ public interface APIService {
     Call<Restaurant> getListRestaurant();
 
     // Get list Product
-
     @GET
     Call<Product> getlListProduct(@Url String url);
-
 }
 

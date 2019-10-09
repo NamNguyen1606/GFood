@@ -36,10 +36,10 @@ public class ResultProduct {
     private String status;
     @SerializedName("restaurant")
     @Expose
-    private Integer restaurant;
+    private Restaurant restaurant;
     @SerializedName("category")
     @Expose
-    private List<Integer> category = null;
+    private List<Category> category = null;
 
     public Integer getId() {
         return id;
@@ -113,19 +113,19 @@ public class ResultProduct {
         this.status = status;
     }
 
-    public Integer getRestaurant() {
+    public Restaurant getRestaurant() {
         return restaurant;
     }
 
-    public void setRestaurant(Integer restaurant) {
+    public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
     }
 
-    public List<Integer> getCategory() {
+    public List<Category> getCategory() {
         return category;
     }
 
-    public void setCategory(List<Integer> category) {
+    public void setCategory(List<Category> category) {
         this.category = category;
     }
 

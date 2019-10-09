@@ -1,7 +1,9 @@
 package com.example.gfood.activity;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,7 +40,7 @@ public class SignInFragment extends Fragment {
     private TextView tvSignUp;
     private FrameLayout prarentFrameLayout;
     private APIService mAPIServer;
-
+    private SharedPreferences sharedPreferences;
     public SignInFragment() {
         // Required empty public constructor
     }
@@ -48,6 +50,8 @@ public class SignInFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Context context = getContext();
+        sharedPreferences = context.getSharedPreferences("Acount_info",Context.MODE_PRIVATE );
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
         btnSignIn = (Button) view.findViewById(R.id.btn_signIn);
         edtUsername = (EditText) view.findViewById(R.id.edt_signIn_username);
@@ -66,9 +70,8 @@ public class SignInFragment extends Fragment {
                 setFragment(new SignUpFragment());
             }
         });
-        Intent intent = new Intent(getActivity(), HomePageActivity.class);
-        startActivity(intent);
-        getActivity().finish();;
+
+        // Sign In
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,40 +82,16 @@ public class SignInFragment extends Fragment {
                 // Post request
                 mAPIServer = APIutils.getAPIService();
 
-//                //change password
-//                String token ="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTY5MDExMjgxLCJqdGkiOiJmN2MyZjVkYzU0YmE0ZmY4YTJhZTdlZTgzOGY5ZTFkMSIsInVzZXJfaWQiOjQsInR5cGUiOiJjdXN0b21lciJ9.TSFK7PyIp8GtqVxBDLWdEeo_Bh_iRhboHySsIZx99DU";
-//                Log.e("ACCESS", token);
-//                Password password1 = new Password("nam1606", "namnam");
-//                mAPIServer.changePassword(token,password1).enqueue(new Callback<ResponseBody>() {
-//                    @Override
-//                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                        if(response.isSuccessful()){
-//                            Log.e("ACCESS", "sucessful");
-//                            try {
-//                                Log.e("Messeger", response.body().string());
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                        } else {
-//                            Log.e("ACCESS", "false");
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                        Log.e("ERROR", t.getMessage());
-//                    }
-//                });
-
-
-
                 mAPIServer.login(username,password).enqueue(new Callback<Token>() {
                     @Override
                     public void onResponse(Call<Token> call, Response<Token> response) {
                         // Get token
                         try {
-                            Log.e("Refresh: ",response.body().getRefresh());
-                            Log.e("Access: ",response.body().getAccess());
+                            sharedPreferences.edit().putString("Username", edtUsername.getText().toString()).apply();
+                            sharedPreferences.edit().putString("Password", edtPassword.getText().toString()).apply();
+                            sharedPreferences.edit().putString("Token_Access", "Bearer " + response.body().getAccess()).apply();
+                            sharedPreferences.edit().putString("Token_Refresh", "Bearer " + response.body().getRefresh()).apply();
+
                             Intent intent = new Intent(getActivity(), HomePageActivity.class);
                             startActivity(intent);
                             getActivity().finish();

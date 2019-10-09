@@ -14,7 +14,7 @@ public class Product {
     private String next;
     @SerializedName("previous")
     @Expose
-    private String previous;
+    private Object previous;
     @SerializedName("results")
     @Expose
     private List<ResultProduct> results = null;
@@ -35,11 +35,11 @@ public class Product {
         this.next = next;
     }
 
-    public String getPrevious() {
+    public Object getPrevious() {
         return previous;
     }
 
-    public void setPrevious(String previous) {
+    public void setPrevious(Object previous) {
         this.previous = previous;
     }
 
@@ -50,5 +50,4 @@ public class Product {
     public void setResults(List<ResultProduct> results) {
         this.results = results;
     }
-
 }

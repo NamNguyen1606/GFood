@@ -1,7 +1,9 @@
 package com.example.gfood.activity;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,7 +44,8 @@ public class HomeFragment extends Fragment {
     private ListView listView;
     private List<ResultRestaurant> restaurantList;
     private List<ResultProduct> productList;
-    APIService apiService;
+    private APIService apiService;
+    private SharedPreferences sharedPreferences;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,6 +61,9 @@ public class HomeFragment extends Fragment {
         tvFood = (TextView) view.findViewById(R.id.fragHome_search_tvFoodTab);
         edtSearch = (EditText) view.findViewById(R.id.fragHome_search_edtSearch);
         listView = (ListView) view.findViewById(R.id.fragHome_listview);
+        Context context = getContext();
+        sharedPreferences = context.getSharedPreferences("Acount_info", Context.MODE_PRIVATE);
+
 
         apiService = APIutils.getAPIService();
 
@@ -85,9 +91,10 @@ public class HomeFragment extends Fragment {
         tvFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                apiService.getlListProduct("api/product/?page=1").enqueue(new Callback<Product>() {
+                apiService.getlListProduct("api/product/").enqueue(new Callback<Product>() {
                     @Override
                     public void onResponse(Call<Product> call, Response<Product> response) {
+                        Log.e("Run", "DO IT");
                         productList = response.body().getResults();
                         ProductAdapter productAdapter = new ProductAdapter(getActivity(), R.layout.listview_product, productList);
                         listView.setAdapter(productAdapter);
@@ -95,7 +102,7 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<Product> call, Throwable t) {
-
+                        Log.e("Run", "Wrong");
                     }
                 });
             }
