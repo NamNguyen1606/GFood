@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.fragHome_listview);
         Context context = getContext();
         sharedPreferences = context.getSharedPreferences("Acount_info", Context.MODE_PRIVATE);
-
+        Log.e("Token Access: ", sharedPreferences.getString("Token_Access", null));
 
         apiService = APIutils.getAPIService();
 

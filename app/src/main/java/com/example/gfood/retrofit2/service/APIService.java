@@ -3,6 +3,7 @@ package com.example.gfood.retrofit2.service;
 import com.example.gfood.retrofit2.model.Account;
 import com.example.gfood.retrofit2.model.Password;
 import com.example.gfood.retrofit2.model.Product;
+import com.example.gfood.retrofit2.model.ProductsQuantity;
 import com.example.gfood.retrofit2.model.Restaurant;
 import com.example.gfood.retrofit2.model.Token;
 
@@ -36,6 +37,13 @@ public interface APIService {
     @POST("api/user/changepwd/")
     Call<ResponseBody> changePassword(@Header ("Authorization") String token,
                                       @Body Password password);
+
+    // Add Product to cart
+    @Headers("Content-Type: application/json")
+    @POST("api/item/")
+    Call<ResponseBody> addProdToCart(@Header("Authorization") String token,
+                                     @Body ProductsQuantity productsQuantity);
+
     // Get list restaurant
     @GET("api/restaurant/")
     Call<Restaurant> getListRestaurant();
