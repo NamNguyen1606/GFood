@@ -96,22 +96,19 @@ public class ProductAdapter extends BaseAdapter {
             public void onClick(View v) {
                 sharedPreferences = context.getSharedPreferences("Acount_info", Context.MODE_PRIVATE);
                 String token = sharedPreferences.getString("Token_Access", null);
-                String prodQuantity = finalViewHolder.edtQuantity.getText().toString();
+                int prodQuantity = Integer.parseInt(finalViewHolder.edtQuantity.getText().toString());
                 String prodId = productList.get(i).getId().toString();
 
                 apiService = APIutils.getAPIService();
                 ProductsQuantity productsQuantity = new ProductsQuantity(prodId, prodQuantity);
-
-                Log.e("Check: ",prodId + " " + prodQuantity);
-                Log.e("token: ", token);
                 apiService.addProdToCart(token, productsQuantity).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                        try {
-//                            Toast.makeText(context, response.body().string() + " ", Toast.LENGTH_SHORT).show();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
+                        try {
+                            Toast.makeText(context, response.body().string() + " ", Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override

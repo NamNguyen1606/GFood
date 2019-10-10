@@ -63,7 +63,6 @@ public class RestaurantPage extends AppCompatActivity {
         apiService.getlListProduct(url).enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-                Log.e("RES" , "Right");
                 productList = response.body().getResults();
                 productAdapter = new ProductAdapter(getApplicationContext(), R.layout.listview_product, productList);
                 lvResMenu.setAdapter(productAdapter);

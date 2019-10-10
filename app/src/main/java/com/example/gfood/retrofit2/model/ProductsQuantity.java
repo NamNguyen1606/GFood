@@ -11,9 +11,9 @@ public class ProductsQuantity {
 
     @SerializedName("quantity")
     @Expose
-    private String quantity;
+    private int quantity;
 
-    public ProductsQuantity(String product, String quantity) {
+    public ProductsQuantity(String product, int quantity) {
         this.product = product;
         this.quantity = quantity;
     }
@@ -26,11 +26,11 @@ public class ProductsQuantity {
         this.product = product;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
