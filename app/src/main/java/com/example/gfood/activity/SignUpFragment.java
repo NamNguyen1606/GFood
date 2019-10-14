@@ -1,7 +1,9 @@
 package com.example.gfood.activity;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +22,8 @@ import com.example.gfood.retrofit2.model.Token;
 import com.example.gfood.retrofit2.service.APIService;
 import com.example.gfood.retrofit2.service.APIutils;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,8 +36,8 @@ public class SignUpFragment extends Fragment {
 
     private EditText edtUsername, edtPassword, edtConfirmPassword;
     private Button btn_signUp;
-    APIService mApiServer;
-
+    private APIService mApiServer;
+    private SharedPreferences sharedPreferences;
     public SignUpFragment() {
         // Required empty public constructor
     }
@@ -54,59 +58,71 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Context context = getContext();
+        sharedPreferences = context.getSharedPreferences("Acount_info", Context.MODE_PRIVATE);
         btn_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = edtUsername.getText().toString();
-                String password = edtPassword.getText().toString();
+
+                final String username = edtUsername.getText().toString();
+                final String password = edtPassword.getText().toString();
                 String confirmPassword = edtConfirmPassword.getText().toString();
 
-                mApiServer =  APIutils.getAPIService();
+                //check null input
+                if(username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty())
+                    Toast.makeText(getActivity(), "Field can't be empty", Toast.LENGTH_SHORT).show();
+                else {
+                    mApiServer =  APIutils.getAPIService();
 
+                    if (password.equals(confirmPassword)){
 
-                if (password.equals(confirmPassword)){
+                        mApiServer.register(username, password).enqueue(new Callback<Account>() {
+                            @Override
+                            public void onResponse(Call<Account> call, Response<Account> response) {
 
-                    mApiServer.register(username, password).enqueue(new Callback<Account>() {
-                        @Override
-                        public void onResponse(Call<Account> call, Response<Account> response) {
+                                try {
 
-                            try {
-
-                                Log.e("Username", response.body().getUsername());
 //                                // Login account
-                                mApiServer.login(response.body().getUsername(), response.body().getPassword()).enqueue(new Callback<Token>() {
-                                    @Override
-                                    public void onResponse(Call<Token> call, Response<Token> response) {
-                                        String Access = response.body().getAccess();
-                                        String Refresh = response.body().getRefresh();
+                                    mApiServer.login(username,password).enqueue(new Callback<Token>() {
+                                        @Override
+                                        public void onResponse(Call<Token> call, Response<Token> response) {
+                                            // Get token
+                                            try {
+                                                sharedPreferences.edit().putString("Username", edtUsername.getText().toString()).apply();
+                                                sharedPreferences.edit().putString("Password", edtPassword.getText().toString()).apply();
+                                                sharedPreferences.edit().putString("Token_Access", "Bearer " + response.body().getAccess()).apply();
+                                                sharedPreferences.edit().putString("Token_Refresh", "Bearer " + response.body().getRefresh()).apply();
 
-                                        Intent intent = new Intent(getActivity(), HomePageActivity.class);
-                                        startActivity(intent);
-                                        getActivity().finish();
-                                    }
+                                                Intent intent = new Intent(getActivity(), HomePageActivity.class);
+                                                startActivity(intent);
+                                                getActivity().finish();
 
-                                    @Override
-                                    public void onFailure(Call<Token> call, Throwable t) {
+                                            } catch (Exception e){
+                                                Toast.makeText(getActivity(), "Token null", Toast.LENGTH_SHORT).show();
+                                            }
 
-                                    }
-                                });
+                                        }
+                                        @Override
+                                        public void onFailure(Call<Token> call, Throwable t) {
+                                            Log.e("Error",t.getMessage());
+                                        }
+                                    });
 
-                            } catch (Exception e){
-                                Toast.makeText(getActivity(), "Username alreadly exist", Toast.LENGTH_SHORT).show();
+                                } catch (Exception e){
+                                    Toast.makeText(getActivity(), "Username alreadly exist", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<Account> call, Throwable t) {
-                            Log.e("Error", t.getMessage());
-                        }
-                    });
-
-//                    Intent intent = new Intent(getActivity(), HomePageActivity.class);
-//                    startActivity(intent);
-//                    getActivity().finish();
+                            @Override
+                            public void onFailure(Call<Account> call, Throwable t) {
+                                Log.e("Error Sign up", t.getMessage());
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+                    }
                 }
+
             }
         });
 

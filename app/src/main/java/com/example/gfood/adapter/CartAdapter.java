@@ -55,7 +55,7 @@ final String WEBSITE = "https://softwaredevelopmentproject.azurewebsites.net/";
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if(viewHolder == null){
-
+//            viewHolder.imgCartList
         }
         return null;
     }

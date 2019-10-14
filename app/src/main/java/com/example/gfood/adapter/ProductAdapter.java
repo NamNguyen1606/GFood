@@ -106,6 +106,7 @@ public class ProductAdapter extends BaseAdapter {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         try {
                             Toast.makeText(context, response.body().string() + " ", Toast.LENGTH_SHORT).show();
+                            Log.e("Product add: " , response.body().string());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
