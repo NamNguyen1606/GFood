@@ -38,7 +38,8 @@
         android:layout_marginTop="32dp"
         android:hint="Confirm passwrod"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtChagPwdNew" />
+        app:layout_constraintTop_toBottomOf="@+id/edtChagPwdNew"
+        android:inputType="textPassword"/>
 
     <EditText
         android:id="@+id/edtChagPwdOld"
@@ -49,7 +50,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.091" />
+        app:layout_constraintVertical_bias="0.091"
+        android:inputType="textPassword"/>
 
     <EditText
         android:id="@+id/edtChagPwdNew"
@@ -59,7 +61,8 @@
         android:layout_marginTop="40dp"
         android:hint="New password"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtChagPwdOld" />
+        app:layout_constraintTop_toBottomOf="@+id/edtChagPwdOld"
+        android:inputType="textPassword"/>
 
     <TextView
         android:id="@+id/textView"
@@ -73,5 +76,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 </android.support.constraint.ConstraintLayout>

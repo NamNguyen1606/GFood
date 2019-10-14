@@ -61,28 +61,32 @@ public class ChangePwdActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Field can't Empty", Toast.LENGTH_SHORT).show();
                 } else {
                     if(oldPassword.equals(oldPwd)){
-                        Password password = new Password(oldPassword, newPassword);
-                        Log.e("ACCESS: ", tokenRefresh);
-                        apiService.changePassword(tokenRefresh, password).enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if(response.isSuccessful()){
-                                    try {
-                                        Toast.makeText(getApplicationContext(), response.body().string(), Toast.LENGTH_SHORT).show();
-                                        sharedPreferences.edit().putString("Password", newPassword);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
+                        if(newPassword.equals(confirmPassword)){
+                            Password password = new Password(oldPassword, newPassword);
+                            apiService.changePassword(tokenRefresh, password).enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if(response.isSuccessful()){
+                                        try {
+                                            Toast.makeText(getApplicationContext(), response.body().string(), Toast.LENGTH_SHORT).show();
+                                            sharedPreferences.edit().putString("Password", newPassword).commit();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        Log.e("ACCESS", "false");
                                     }
-                                } else {
-                                    Log.e("ACCESS", "false");
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                Log.e("ERROR", t.getMessage());
-                            }
-                        });
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    Log.e("ERROR", t.getMessage());
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Password don't match", Toast.LENGTH_SHORT).show();
+                        }
+
 
                     } else {
                         Toast.makeText(getApplicationContext(), "Old password is incorect", Toast.LENGTH_SHORT).show();
