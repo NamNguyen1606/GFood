@@ -7,11 +7,64 @@
     android:orientation="vertical"
     tools:context=".activity.CartFragment">
 
-    <ListView
+    <FrameLayout
+        android:layout_weight="82"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <ListView
+            android:id="@+id/lvFragCart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteY="8dp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </FrameLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="89"/>
+        android:layout_weight="7"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Total :"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#091A61"
+            android:textSize="30sp"/>
+
+        <TextView
+            android:id="@+id/tvFragCartTotal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#091A61"
+            android:textSize="30sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="đ"
+            android:textStyle="bold"
+            android:textColor="#091A61"
+            android:textSize="30sp"/>
+    </LinearLayout>
+
+
+
     <Button
+        android:id="@+id/btnFragCartPayment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="10"
@@ -23,7 +76,8 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
-
     </FrameLayout>
+
+
 
 </LinearLayout>

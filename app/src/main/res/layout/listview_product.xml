@@ -65,7 +65,8 @@
             android:gravity="center"
             android:inputType="number"
             android:text="1"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="#0A0A0A"/>
 
         <Button
             android:id="@+id/btnProdAdd"
@@ -74,7 +75,7 @@
             android:layout_weight="9"
             android:text="Add"
             android:textSize="15sp"
-            android:background="#C35B7ED8"
+            android:background="@drawable/ripple_effect_raise"
             android:layout_marginBottom="7dp"/>
 
 

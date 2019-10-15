@@ -55,7 +55,8 @@
         android:paddingLeft="15dp"
         android:paddingTop="10dp"
         android:text="Change password"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:background="@drawable/ripple_effect_raise"/>
 
     <TextView
         android:id="@+id/tvProfPayment"
@@ -65,7 +66,8 @@
         android:paddingLeft="15dp"
         android:paddingTop="10dp"
         android:text="Payment"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:background="@drawable/ripple_effect_raise"/>
 
     <TextView
         android:id="@+id/tvProfHistory"
@@ -75,7 +77,8 @@
         android:paddingLeft="15dp"
         android:paddingTop="10dp"
         android:text="History"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:background="@drawable/ripple_effect_raise"/>
 
     <TextView
         android:id="@+id/tvProfSignOut"
@@ -85,7 +88,8 @@
         android:paddingLeft="15dp"
         android:paddingTop="10dp"
         android:text="Sign out"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:background="@drawable/ripple_effect_raise"/>
 
 
     <FrameLayout

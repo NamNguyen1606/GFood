@@ -104,12 +104,7 @@ public class ProductAdapter extends BaseAdapter {
                 apiService.addProdToCart(token, productsQuantity).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            Toast.makeText(context, response.body().string() + " ", Toast.LENGTH_SHORT).show();
-                            Log.e("Product add: " , response.body().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                            Toast.makeText(context, "Product was added", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

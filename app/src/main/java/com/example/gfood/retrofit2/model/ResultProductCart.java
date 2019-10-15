@@ -1,12 +1,11 @@
 package com.example.gfood.retrofit2.model;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ResultProduct {
+import java.util.List;
 
+public class ResultProductCart {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -36,7 +35,7 @@ public class ResultProduct {
     private String status;
     @SerializedName("restaurant")
     @Expose
-    private ResultRestaurant restaurant;
+    private ResultRestaurantCart restaurant;
     @SerializedName("category")
     @Expose
     private List<Category> category = null;
@@ -113,11 +112,11 @@ public class ResultProduct {
         this.status = status;
     }
 
-    public ResultRestaurant getRestaurant() {
+    public ResultRestaurantCart getRestaurant() {
         return restaurant;
     }
 
-    public void setRestaurant(ResultRestaurant restaurant) {
+    public void setRestaurant(ResultRestaurantCart restaurant) {
         this.restaurant = restaurant;
     }
 
@@ -128,6 +127,4 @@ public class ResultProduct {
     public void setCategory(List<Category> category) {
         this.category = category;
     }
-
 }
-

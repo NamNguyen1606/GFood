@@ -1,6 +1,7 @@
 package com.example.gfood.retrofit2.service;
 
 import com.example.gfood.retrofit2.model.Account;
+import com.example.gfood.retrofit2.model.Cart;
 import com.example.gfood.retrofit2.model.Password;
 import com.example.gfood.retrofit2.model.Product;
 import com.example.gfood.retrofit2.model.ProductsQuantity;
@@ -43,6 +44,9 @@ public interface APIService {
     @POST("api/item/")
     Call<ResponseBody> addProdToCart(@Header("Authorization") String token,
                                      @Body ProductsQuantity productsQuantity);
+    // get list product in cart
+    @GET("api/cart/")
+    Call<Cart> getListProductInCart(@Header("Authorization") String token);
 
     // Get list restaurant
     @GET("api/restaurant/")

@@ -1,11 +1,9 @@
 package com.example.gfood.retrofit2.model;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ResultProduct {
+public class ResultRestaurantCart {
 
     @SerializedName("id")
     @Expose
@@ -16,30 +14,27 @@ public class ResultProduct {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("address")
+    @Expose
+    private String address;
     @SerializedName("detail")
     @Expose
     private String detail;
-    @SerializedName("price")
-    @Expose
-    private Integer price;
     @SerializedName("image")
     @Expose
     private String image;
+    @SerializedName("is_active")
+    @Expose
+    private Boolean isActive;
     @SerializedName("is_deleted")
     @Expose
     private Boolean isDeleted;
     @SerializedName("create_at")
     @Expose
     private String createAt;
-    @SerializedName("status")
+    @SerializedName("user")
     @Expose
-    private String status;
-    @SerializedName("restaurant")
-    @Expose
-    private ResultRestaurant restaurant;
-    @SerializedName("category")
-    @Expose
-    private List<Category> category = null;
+    private int user;
 
     public Integer getId() {
         return id;
@@ -65,6 +60,14 @@ public class ResultProduct {
         this.name = name;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getDetail() {
         return detail;
     }
@@ -73,20 +76,20 @@ public class ResultProduct {
         this.detail = detail;
     }
 
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
     public String getImage() {
         return image;
     }
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public Boolean getIsDeleted() {
@@ -105,29 +108,11 @@ public class ResultProduct {
         this.createAt = createAt;
     }
 
-    public String getStatus() {
-        return status;
+    public int getUser() {
+        return user;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setUser(int user) {
+        this.user = user;
     }
-
-    public ResultRestaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(ResultRestaurant restaurant) {
-        this.restaurant = restaurant;
-    }
-
-    public List<Category> getCategory() {
-        return category;
-    }
-
-    public void setCategory(List<Category> category) {
-        this.category = category;
-    }
-
 }
-
