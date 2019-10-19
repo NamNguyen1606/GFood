@@ -7,18 +7,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.gfood.R;
 import com.example.gfood.adapter.CartAdapter;
+import com.example.gfood.adapter.ProductAdapter;
 import com.example.gfood.retrofit2.model.Cart;
 import com.example.gfood.retrofit2.model.ResultCart;
+import com.example.gfood.retrofit2.model.ResultProduct;
 import com.example.gfood.retrofit2.service.APIService;
 import com.example.gfood.retrofit2.service.APIutils;
 
@@ -35,11 +40,19 @@ import retrofit2.Response;
  */
 public class CartFragment extends Fragment {
     private TextView tvTotal;
-    private Button btnPayment;
+    private Button btnPayment, btnAddPro;
     private ListView lvCart;
     private SharedPreferences sharedPreferences;
     private APIService apiService;
     private List<ResultCart> resultCartList;
+    private Boolean CheckDeleteRefresh = false;
+    private Boolean CheckRefresh = false;
+    private List<ResultProduct> productList;
+    private CartAdapter cartAdapter;
+    private ProductAdapter productAdapter;
+    private OnItemClick onItemClick;
+    private OnProductClick onProductClick;
+
     public CartFragment() {
         // Required empty public constructor
     }
@@ -58,14 +71,15 @@ public class CartFragment extends Fragment {
         Context context = getContext();
         sharedPreferences = context.getSharedPreferences("Acount_info", Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("Token_Access", "");
-        Log.e("TOKEN IN CART: ", token);
+
         // Show Product in cart
         apiService.getListProductInCart(token).enqueue(new Callback<Cart>() {
             @Override
             public void onResponse(Call<Cart> call, Response<Cart> response) {
                 resultCartList = response.body().getResults();
-                CartAdapter cartAdapter = new CartAdapter(getContext(),R.layout.listview_cart, resultCartList);
+                cartAdapter = new CartAdapter(getContext(),R.layout.listview_cart, resultCartList);
                 lvCart.setAdapter(cartAdapter);
+                cartAdapter.onItemClick = onItemClick;
             }
 
             @Override
@@ -79,7 +93,40 @@ public class CartFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
+        onItemClick = new OnItemClick() {
+            @Override
+            public void itemClick(boolean value) {
+                CheckDeleteRefresh = value;
+                if(CheckDeleteRefresh){
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.detach(CartFragment.this).attach(CartFragment.this).commit();
+                }
+                CheckDeleteRefresh = false;
+
+                if(CheckRefresh){
+                    Log.e("Refresh", "Yes");
+                    CheckRefresh = false;
+                }
+            }
+        };
+
+        if(CheckRefresh){
+            Log.e("Refresh", "Yes");
+            CheckRefresh = false;
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        CheckRefresh = true;
+        Log.e("Refresh", "Stop");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("Refresh", "Pause");
     }
 }

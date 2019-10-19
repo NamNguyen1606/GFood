@@ -11,6 +11,7 @@ import com.example.gfood.retrofit2.model.Token;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -55,5 +56,9 @@ public interface APIService {
     // Get list Product
     @GET
     Call<Product> getlListProduct(@Url String url);
+
+    // Delete product in cart
+    @DELETE
+    Call<ResponseBody> deleteProductInCart(@Header("Authorization") String token, @Url String url);
 }
 

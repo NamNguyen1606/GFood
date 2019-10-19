@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,10 @@ public class HomeFragment extends Fragment {
     private List<ResultProduct> productList;
     private APIService apiService;
     private SharedPreferences sharedPreferences;
+    private RestaurantAdapter restaurantAdapter;
+    private ProductAdapter productAdapter;
+    public OnProductClick onProductClick;
+    private boolean checkRefresh = false;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -67,16 +72,19 @@ public class HomeFragment extends Fragment {
 
         apiService = APIutils.getAPIService();
 
-        apiService.getListRestaurant().enqueue(new Callback<Restaurant>() {
+        apiService.getlListProduct("api/product/").enqueue(new Callback<Product>() {
             @Override
-            public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
-                restaurantList = response.body().getResults();
-                RestaurantAdapter restaurantAdapter = new RestaurantAdapter(getActivity(),R.layout.listview_restaurant, restaurantList);
-                listView.setAdapter(restaurantAdapter);
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                Log.e("Run", "DO IT");
+                productList = response.body().getResults();
+                productAdapter = new ProductAdapter(getActivity(), R.layout.listview_product, productList);
+                listView.setAdapter(productAdapter);
+                productAdapter.productClick = onProductClick;
             }
 
             @Override
-            public void onFailure(Call<Restaurant> call, Throwable t) {
+            public void onFailure(Call<Product> call, Throwable t) {
+                Log.e("Run", "Wrong");
             }
         });
         return view;
@@ -88,6 +96,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Fill data to list product
         tvFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,8 +105,9 @@ public class HomeFragment extends Fragment {
                     public void onResponse(Call<Product> call, Response<Product> response) {
                         Log.e("Run", "DO IT");
                         productList = response.body().getResults();
-                        ProductAdapter productAdapter = new ProductAdapter(getActivity(), R.layout.listview_product, productList);
+                        productAdapter = new ProductAdapter(getActivity(), R.layout.listview_product, productList);
                         listView.setAdapter(productAdapter);
+                        productAdapter.productClick = onProductClick;
                     }
 
                     @Override
@@ -108,6 +118,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Fill data to restaurant list
         tvRestaurant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,7 +126,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
                         restaurantList = response.body().getResults();
-                        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(getActivity(),R.layout.listview_restaurant, restaurantList);
+                        restaurantAdapter = new RestaurantAdapter(getActivity(),R.layout.listview_restaurant, restaurantList);
                         listView.setAdapter(restaurantAdapter);
                     }
 
@@ -139,5 +150,21 @@ public class HomeFragment extends Fragment {
               startActivity(intent);
             }
         });
+
+        //
+        onProductClick = new OnProductClick() {
+            @Override
+            public void productItemClick(boolean value) {
+                checkRefresh = value;
+                if (checkRefresh){
+                    Fragment fragment = getActivity().getSupportFragmentManager().getFragments().get(1);
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.detach(fragment).attach(fragment).commit();
+                }
+
+                checkRefresh = false;
+
+            }
+        };
     }
 }

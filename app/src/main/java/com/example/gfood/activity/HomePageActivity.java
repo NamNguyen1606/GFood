@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import com.example.gfood.R;
 
@@ -33,14 +35,7 @@ public class HomePageActivity extends AppCompatActivity {
 
         tabLayout.initialize(viewPager, getSupportFragmentManager(), fragmentList, savedInstanceState);
 
+
     }
-
-
-    private void setFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(tabLayout.getId(), fragment).addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
 
 }

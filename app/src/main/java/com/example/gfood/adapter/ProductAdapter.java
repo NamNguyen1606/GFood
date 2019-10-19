@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gfood.R;
+import com.example.gfood.activity.OnItemClick;
+import com.example.gfood.activity.OnProductClick;
 import com.example.gfood.retrofit2.model.Product;
 import com.example.gfood.retrofit2.model.ProductsQuantity;
 import com.example.gfood.retrofit2.model.ResultProduct;
@@ -36,7 +38,7 @@ public class ProductAdapter extends BaseAdapter {
     private List<ResultProduct> productList;
     private APIService apiService;
     private SharedPreferences sharedPreferences;
-
+    public OnProductClick productClick;
     public ProductAdapter(Context context, int layout, List<ResultProduct> productList) {
         this.context = context;
         this.ProductLayout = layout;
@@ -91,6 +93,8 @@ public class ProductAdapter extends BaseAdapter {
         Picasso.with(context).load(WEBSITE + product.getImage()).into(viewHolder.imgProd);
 
         final ViewHolder finalViewHolder = viewHolder;
+
+        //ADD PRODUCT TO CART
         viewHolder.btnAddProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +105,9 @@ public class ProductAdapter extends BaseAdapter {
 
                 apiService = APIutils.getAPIService();
                 ProductsQuantity productsQuantity = new ProductsQuantity(prodId, prodQuantity);
+
+                productClick.productItemClick(true);
+
                 apiService.addProdToCart(token, productsQuantity).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
