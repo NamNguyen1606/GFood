@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.ChangePwdActivity"></activity>
-        <activity android:name=".activity.RestaurantPage" />
+        <activity android:name=".activity.RestaurantPageActivity" />
         <activity android:name=".activity.RegisterActivity" />
         <activity
             android:name=".activity.HomePageActivity"

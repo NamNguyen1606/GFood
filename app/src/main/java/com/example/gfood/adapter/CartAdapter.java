@@ -35,6 +35,8 @@ public class CartAdapter extends BaseAdapter {
     private Context context;
     private List<ResultCart> resultCartList;
     private int cartLayout;
+
+    private int total = 0;
     private APIService apiService;
     private SharedPreferences sharedPreferences;
     public OnItemClick onItemClick;
@@ -70,6 +72,14 @@ public class CartAdapter extends BaseAdapter {
         return position;
     }
 
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
     public class ViewHolder {
         ImageView imgCartList;
         TextView tvProdName, tvResName, tvProdPrice, tvQuantity;
@@ -77,7 +87,7 @@ public class CartAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
         if (viewHolder == null) {
@@ -112,6 +122,18 @@ public class CartAdapter extends BaseAdapter {
         viewHolder.tvQuantity.setText(quantity + "");
         Picasso.with(context).load(WEBSITE + imgUrl).into(viewHolder.imgCartList);
 
+        //Total all item in cart
+        int total = 0;
+        for(int i = 0; i < resultCartList.size(); i++){
+            int price_ = resultCartList.get(i).getPrice();
+            int quantity_ = resultCartList.get(i).getQuantity();
+            total = total + (quantity_ * price_);
+        }
+        setTotal(total);
+
+        Log.e("Total " + position, getTotal() + "");
+
+        // Delete Product from cart
         final String url = "api/item/" + resultCartList.get(position).getId();
         viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +144,13 @@ public class CartAdapter extends BaseAdapter {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Toast.makeText(context, response.message(), Toast.LENGTH_SHORT).show();
-                        onItemClick.itemClick(true);
+                        int price = resultCartList.get(position).getPrice();
+                        int quantity = resultCartList.get(position).getQuantity();
+                        int total = getTotal();
+                        total = total - (price * quantity);
+                        setTotal(total);
+                        Log.e("Total DELETE " + position, getTotal() + "");
+                        onItemClick.itemClick(position, total);
                     }
 
                     @Override

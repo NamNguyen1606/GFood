@@ -1,6 +1,5 @@
 package com.example.gfood.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.gfood.R;
 import com.example.gfood.adapter.ProductAdapter;
-import com.example.gfood.adapter.RestaurantAdapter;
 import com.example.gfood.retrofit2.model.Product;
 import com.example.gfood.retrofit2.model.ResultProduct;
 import com.example.gfood.retrofit2.service.APIService;
@@ -24,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RestaurantPage extends AppCompatActivity {
+public class RestaurantPageActivity extends AppCompatActivity {
 
     final String WEBSITE = "https://softwaredevelopmentproject.azurewebsites.net/";
     private TextView tvResName, tvResAddress, tvResDetail;
@@ -33,6 +31,7 @@ public class RestaurantPage extends AppCompatActivity {
     private APIService apiService;
     private List<ResultProduct> productList;
     private ProductAdapter productAdapter;
+    private OnProductClick onProductClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +65,22 @@ public class RestaurantPage extends AppCompatActivity {
                 productList = response.body().getResults();
                 productAdapter = new ProductAdapter(getApplicationContext(), R.layout.listview_product, productList);
                 lvResMenu.setAdapter(productAdapter);
-            }
+                productAdapter.productClick = onProductClick;            }
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
                 Log.e("RES" , "Wrong");
             }
         });
+
+        onProductClick = new OnProductClick() {
+            @Override
+            public void productItemClick() {
+                Log.e("Res Act", "I DO");
+            }
+        };
     }
+
+
 
 }

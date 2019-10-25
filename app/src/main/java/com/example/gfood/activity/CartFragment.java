@@ -45,13 +45,11 @@ public class CartFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private APIService apiService;
     private List<ResultCart> resultCartList;
-    private Boolean CheckDeleteRefresh = false;
-    private Boolean CheckRefresh = false;
-    private List<ResultProduct> productList;
     private CartAdapter cartAdapter;
     private ProductAdapter productAdapter;
     private OnItemClick onItemClick;
-    private OnProductClick onProductClick;
+    private FragmentTransaction fragmentTransaction;
+    private int total = 0;
 
     public CartFragment() {
         // Required empty public constructor
@@ -70,7 +68,9 @@ public class CartFragment extends Fragment {
         apiService = APIutils.getAPIService();
         Context context = getContext();
         sharedPreferences = context.getSharedPreferences("Acount_info", Context.MODE_PRIVATE);
-        String token = sharedPreferences.getString("Token_Access", "");
+        final String token = sharedPreferences.getString("Token_Access", "");
+
+        fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
 
         // Show Product in cart
         apiService.getListProductInCart(token).enqueue(new Callback<Cart>() {
@@ -80,6 +80,16 @@ public class CartFragment extends Fragment {
                 cartAdapter = new CartAdapter(getContext(),R.layout.listview_cart, resultCartList);
                 lvCart.setAdapter(cartAdapter);
                 cartAdapter.onItemClick = onItemClick;
+                // Total all item in cart
+
+                for(int i = 0; i < response.body().getCount(); i++){
+                    int quantity = response.body().getResults().get(i).getQuantity();
+                    int price = response.body().getResults().get(i).getPrice();
+                    total = total + (quantity * price);
+                }
+                tvTotal.setText(total+"");
+                total = 0;
+
             }
 
             @Override
@@ -96,37 +106,13 @@ public class CartFragment extends Fragment {
 
         onItemClick = new OnItemClick() {
             @Override
-            public void itemClick(boolean value) {
-                CheckDeleteRefresh = value;
-                if(CheckDeleteRefresh){
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.detach(CartFragment.this).attach(CartFragment.this).commit();
-                }
-                CheckDeleteRefresh = false;
-
-                if(CheckRefresh){
-                    Log.e("Refresh", "Yes");
-                    CheckRefresh = false;
-                }
+            public void itemClick(int index, int price) {
+                resultCartList.remove(index);
+                tvTotal.setText(price+"");
+                cartAdapter.notifyDataSetChanged();
             }
         };
 
-        if(CheckRefresh){
-            Log.e("Refresh", "Yes");
-            CheckRefresh = false;
-        }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        CheckRefresh = true;
-        Log.e("Refresh", "Stop");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.e("Refresh", "Pause");
-    }
 }

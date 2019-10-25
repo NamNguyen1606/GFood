@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gfood.R;
+import com.example.gfood.activity.HomePageActivity;
 import com.example.gfood.activity.OnItemClick;
 import com.example.gfood.activity.OnProductClick;
 import com.example.gfood.retrofit2.model.Product;
@@ -39,6 +40,9 @@ public class ProductAdapter extends BaseAdapter {
     private APIService apiService;
     private SharedPreferences sharedPreferences;
     public OnProductClick productClick;
+
+
+
     public ProductAdapter(Context context, int layout, List<ResultProduct> productList) {
         this.context = context;
         this.ProductLayout = layout;
@@ -59,6 +63,7 @@ public class ProductAdapter extends BaseAdapter {
     public long getItemId(int i) {
         return i;
     }
+
 
     public class ViewHolder {
         TextView tvProdName, tvProdDetail, tvProdPrice;
@@ -106,12 +111,12 @@ public class ProductAdapter extends BaseAdapter {
                 apiService = APIutils.getAPIService();
                 ProductsQuantity productsQuantity = new ProductsQuantity(prodId, prodQuantity);
 
-                productClick.productItemClick(true);
 
                 apiService.addProdToCart(token, productsQuantity).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Toast.makeText(context, "Product was added", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Product was added", Toast.LENGTH_SHORT).show();
+                        productClick.productItemClick();
                     }
 
                     @Override
@@ -119,7 +124,6 @@ public class ProductAdapter extends BaseAdapter {
                         Log.e("Error Add Product", t.getMessage());
                     }
                 });
-
             }
         });
         return view;

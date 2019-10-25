@@ -27,15 +27,12 @@ public class HomePageActivity extends AppCompatActivity {
         final CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.page_Layout);
         tabLayout = (SpaceTabLayout) findViewById(R.id.spaceTabLayout);
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new HomeFragment());
         fragmentList.add(new CartFragment());
         fragmentList.add(new ProfileFragment());
 
         tabLayout.initialize(viewPager, getSupportFragmentManager(), fragmentList, savedInstanceState);
-
-
     }
 
 }

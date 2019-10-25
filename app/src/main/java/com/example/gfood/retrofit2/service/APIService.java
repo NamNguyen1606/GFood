@@ -7,6 +7,7 @@ import com.example.gfood.retrofit2.model.Product;
 import com.example.gfood.retrofit2.model.ProductsQuantity;
 import com.example.gfood.retrofit2.model.Restaurant;
 import com.example.gfood.retrofit2.model.Token;
+import com.example.gfood.retrofit2.model.UserInfo;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -56,6 +57,10 @@ public interface APIService {
     // Get list Product
     @GET
     Call<Product> getlListProduct(@Url String url);
+
+    // Get user info
+    @GET("api.v2/user/")
+    Call<UserInfo> getUserInfo(@Header("Authorization") String token);
 
     // Delete product in cart
     @DELETE

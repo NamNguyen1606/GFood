@@ -50,7 +50,9 @@ public class HomeFragment extends Fragment {
     private RestaurantAdapter restaurantAdapter;
     private ProductAdapter productAdapter;
     public OnProductClick onProductClick;
-    private boolean checkRefresh = false;
+    private Fragment fragment;
+    private FragmentTransaction fragmentTransaction;
+    private ListenerRefresh listenerRefresh;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -66,16 +68,16 @@ public class HomeFragment extends Fragment {
         tvFood = (TextView) view.findViewById(R.id.fragHome_search_tvFoodTab);
         edtSearch = (EditText) view.findViewById(R.id.fragHome_search_edtSearch);
         listView = (ListView) view.findViewById(R.id.fragHome_listview);
+
         Context context = getContext();
         sharedPreferences = context.getSharedPreferences("Acount_info", Context.MODE_PRIVATE);
-        Log.e("Token Access: ", sharedPreferences.getString("Token_Access", null));
+        Log.e("Token Access: ", sharedPreferences.getString("Token_Access", ""));
 
         apiService = APIutils.getAPIService();
 
         apiService.getlListProduct("api/product/").enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-                Log.e("Run", "DO IT");
                 productList = response.body().getResults();
                 productAdapter = new ProductAdapter(getActivity(), R.layout.listview_product, productList);
                 listView.setAdapter(productAdapter);
@@ -141,7 +143,7 @@ public class HomeFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-              Intent intent = new Intent(getActivity(), RestaurantPage.class);
+              Intent intent = new Intent(getActivity(), RestaurantPageActivity.class);
               intent.putExtra("id",restaurantList.get(i).getId().toString());
               intent.putExtra("name", restaurantList.get(i).getName());
               intent.putExtra("detail", restaurantList.get(i).getDetail());
@@ -151,20 +153,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //
+
         onProductClick = new OnProductClick() {
             @Override
-            public void productItemClick(boolean value) {
-                checkRefresh = value;
-                if (checkRefresh){
-                    Fragment fragment = getActivity().getSupportFragmentManager().getFragments().get(1);
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.detach(fragment).attach(fragment).commit();
-                }
-
-                checkRefresh = false;
+            public void productItemClick() {
+                fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragment = getActivity().getSupportFragmentManager().getFragments().get(1);
+                fragmentTransaction.detach(fragment).attach(fragment).commit();
 
             }
         };
+
+    }
+
+    public interface ListenerRefresh{
+        void onClickRefresh();
     }
 }
