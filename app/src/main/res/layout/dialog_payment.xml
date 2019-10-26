@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="100"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:gravity="center"
+        android:text="Payment"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:background="@drawable/app_background"/>
+
+    // Card number
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="25"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:text="Credit card number"
+            android:textColor="#024274"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/edtPayDiaCardNumber"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="15dp"
+            android:layout_weight="15"
+            android:inputType="number"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    //Month and year
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="26"
+        android:orientation="horizontal">
+
+        // Month
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="13"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="10"
+                android:gravity="center_vertical"
+                android:text="Month"
+                android:textColor="#024274"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edtPayDiaMonth"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="15dp"
+                android:layout_weight="15"
+                android:inputType="number"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        // Year
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="13"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="10"
+                android:gravity="center_vertical"
+                android:text="Year"
+                android:textColor="#024274"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edtPayDiaYear"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="15dp"
+                android:layout_weight="15"
+                android:inputType="number"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    // CVV
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="25"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:text="CVV"
+            android:textColor="#024274"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/edtPayDiaCVV"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="15dp"
+            android:layout_weight="15"
+            android:inputType="number"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="14"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="12"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnPayDiaPayment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:background="@drawable/ripple_effect_raise"
+                android:layout_margin="5dp"
+                android:text="Payment"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/btnPayDiaCancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:background="@drawable/ripple_effect_raise"
+                android:layout_margin="5dp"
+                android:text="Cancel"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"></FrameLayout>
+
+    </LinearLayout>
+</LinearLayout>

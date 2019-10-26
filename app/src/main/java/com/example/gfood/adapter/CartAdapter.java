@@ -63,7 +63,7 @@ public class CartAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public ResultCart getItem(int position) {
         return resultCartList.get(position);
     }
 
@@ -111,7 +111,7 @@ public class CartAdapter extends BaseAdapter {
         }
 
         String productName = resultCartList.get(position).getProduct().getName();
-        String restaurant = resultCartList.get(position).getProduct().getRestaurant().getName();
+        final String restaurant = resultCartList.get(position).getProduct().getRestaurant().getName();
         int price = resultCartList.get(position).getPrice();
         int quantity = resultCartList.get(position).getQuantity();
         String imgUrl = resultCartList.get(position).getProduct().getImage();
@@ -131,7 +131,50 @@ public class CartAdapter extends BaseAdapter {
         }
         setTotal(total);
 
-        Log.e("Total " + position, getTotal() + "");
+        Log.e("Total ", getTotal() + "");
+
+        // Plus and subtract item quantity
+
+        //Plus item quantity
+        final ViewHolder finalViewHolder = viewHolder;
+        viewHolder.btnPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int quantity = resultCartList.get(position).getQuantity();
+                resultCartList.get(position).setQuantity(quantity + 1);
+                Log.e("Plus" + position, quantity + 1 +"");
+                finalViewHolder.tvQuantity.setText(quantity + 1 +"");
+
+                // Total
+                int total = getTotal();
+                int price = resultCartList.get(position).getPrice();
+                total = total + price;
+                setTotal(total);
+                onItemClick.itemQuantityClick(total);
+            }
+        });
+
+        //Subtract item quantity
+        viewHolder.btnSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int quantity = resultCartList.get(position).getQuantity();
+                if(quantity > 1){
+                    resultCartList.get(position).setQuantity(quantity - 1);
+                    Log.e("Sub" + position, quantity - 1 +"");
+                    finalViewHolder.tvQuantity.setText(quantity - 1 +"");
+
+                    // Total
+                    int total = getTotal();
+                    int price = resultCartList.get(position).getPrice();
+                    total = total - price;
+                    setTotal(total);
+                    onItemClick.itemQuantityClick(total);
+                }
+
+            }
+        });
 
         // Delete Product from cart
         final String url = "api/item/" + resultCartList.get(position).getId();
