@@ -43,8 +43,8 @@ public class HomeFragment extends Fragment {
     private TextView tvRestaurant, tvFood;
     private EditText edtSearch;
     private ListView listView;
-    private List<ResultRestaurant> restaurantList;
-    private List<ResultProduct> productList;
+    public static List<ResultRestaurant> restaurantList;
+    public static List<ResultProduct> productList;
     private APIService apiService;
     private SharedPreferences sharedPreferences;
     private RestaurantAdapter restaurantAdapter;
@@ -69,18 +69,30 @@ public class HomeFragment extends Fragment {
         edtSearch = (EditText) view.findViewById(R.id.fragHome_search_edtSearch);
         listView = (ListView) view.findViewById(R.id.fragHome_listview);
 
+        // fill data to product listview
+        productAdapter = new ProductAdapter(getActivity(), R.layout.listview_product, productList);
+        listView.setAdapter(productAdapter);
+        productAdapter.notifyDataSetChanged();
+
         Context context = getContext();
         sharedPreferences = context.getSharedPreferences("Acount_info", Context.MODE_PRIVATE);
         Log.e("Token Access: ", sharedPreferences.getString("Token_Access", ""));
 
         apiService = APIutils.getAPIService();
 
-        apiService.getlListProduct("api/product/").enqueue(new Callback<Product>() {
+        apiService.getlListProduct("api/product/?page=3").enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-                productList = response.body().getResults();
-                productAdapter = new ProductAdapter(getActivity(), R.layout.listview_product, productList);
-                listView.setAdapter(productAdapter);
+                for(int i = 0; i < 10; i++){
+                    try {
+                        ResultProduct resultProduct = response.body().getResults().get(i);
+                        productList.add(resultProduct);
+                    } catch (Exception e){
+
+                    }
+
+                }
+                productAdapter.notifyDataSetChanged();
                 productAdapter.productClick = onProductClick;
             }
 
