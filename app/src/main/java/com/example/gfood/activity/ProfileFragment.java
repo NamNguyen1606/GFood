@@ -43,6 +43,7 @@ import retrofit2.Response;
  */
 public class ProfileFragment extends Fragment {
 
+    private final String WEBSITE_URL = "https://softwaredevelopmentproject.azurewebsites.net/";
     private ImageView imgAvatarUser;
     private TextView tvUsername, tvAddress, tvPhoneNumber, tvChangePwd, tvPayment, tvHistory, tvSignOut;
     private Button btnEdit;
@@ -115,9 +116,9 @@ public class ProfileFragment extends Fragment {
                 // Avatar
                 if((response.body().getImage().isEmpty()) == false){
                     imgAvatar = response.body().getImage();
-                    sharedPreferences.edit().putString("AvatarImage_Info", imgAvatar);
+                    sharedPreferences.edit().putString("AvatarImage_Info", WEBSITE_URL + imgAvatar);
                     try{
-                        Picasso.with(getContext().getApplicationContext()).load(imgAvatar).into(imgAvatarUser);
+                        Picasso.with(getContext().getApplicationContext()).load(WEBSITE_URL + imgAvatar).resize(250, 200).into(imgAvatarUser);
                     }catch (Exception e){
 
                     }

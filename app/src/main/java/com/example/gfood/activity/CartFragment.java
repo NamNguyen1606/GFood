@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,16 +18,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gfood.R;
 import com.example.gfood.adapter.CartAdapter;
 import com.example.gfood.adapter.ProductAdapter;
+import com.example.gfood.retrofit2.model.Bill;
+import com.example.gfood.retrofit2.model.Card;
 import com.example.gfood.retrofit2.model.Cart;
 import com.example.gfood.retrofit2.model.Quantity;
 import com.example.gfood.retrofit2.model.ResultCart;
 import com.example.gfood.retrofit2.service.APIService;
 import com.example.gfood.retrofit2.service.APIutils;
 
+import java.io.IOException;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -146,7 +151,56 @@ public class CartFragment extends Fragment {
                         }
                     });
                 }
-                dialogAddCard();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        final String token = sharedPreferences.getString("Token_Access", "");
+
+                        apiService.getInfoCard(token).enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                // Check: do account have card?
+                                if(response.isSuccessful()){
+
+                                    // Payment all item in card
+                                    apiService.payment(token).enqueue(new Callback<Bill>() {
+                                        @Override
+                                        public void onResponse(Call<Bill> call, Response<Bill> response) {
+                                            if(response.isSuccessful()){
+
+                                               fragmentTransaction.detach(CartFragment.this).attach(CartFragment.this).commit();
+                                                Toast.makeText(getContext(), "Payment successfull", Toast.LENGTH_SHORT).show();
+
+                                            } else {
+                                                try {
+                                                    Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Bill> call, Throwable t) {
+
+                                        }
+                                    });
+
+                                } else {
+                                    dialogAddCard();
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                }, 1000);
             }
         });
 
@@ -157,19 +211,70 @@ public class CartFragment extends Fragment {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_payment);
 
-        EditText edtCardNumber = (EditText) dialog.findViewById(R.id.edtPayDiaCardNumber);
-        EditText edtExpMonth = (EditText) dialog.findViewById(R.id.edtPayDiaMonth);
-        EditText edtExpYear = (EditText) dialog.findViewById(R.id.edtPayDiaYear);
-        EditText edtCVV = (EditText) dialog.findViewById(R.id.edtPayDiaCVV);
+        final EditText edtCardNumber = (EditText) dialog.findViewById(R.id.edtPayDiaCardNumber);
+        final EditText edtExpMonth = (EditText) dialog.findViewById(R.id.edtPayDiaMonth);
+        final EditText edtExpYear = (EditText) dialog.findViewById(R.id.edtPayDiaYear);
+        final EditText edtCVV = (EditText) dialog.findViewById(R.id.edtPayDiaCVV);
         Button btnPayment = (Button) dialog.findViewById(R.id.btnPayDiaPayment);
         Button btnCancel = (Button) dialog.findViewById(R.id.btnPayDiaCancel);
         dialog.show();
+
 
         // Payment
         btnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                long numberCard = Long.parseLong(edtCardNumber.getText().toString());
+                int expMonth = Integer.parseInt(edtExpMonth.getText().toString());
+                int expYear = Integer.parseInt(edtExpYear.getText().toString());
+                int cvv = Integer.parseInt(edtCVV.getText().toString());
+
+                final Card card = new Card(numberCard, expMonth, expYear, cvv);
+                final String token = sharedPreferences.getString("Token_Access", "");
+
+                apiService.addCard(token, card).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()){
+
+                            // Payment all item in card
+                            apiService.payment(token).enqueue(new Callback<Bill>() {
+                                @Override
+                                public void onResponse(Call<Bill> call, Response<Bill> response) {
+                                    if(response.isSuccessful()){
+
+                                            Toast.makeText(getContext(), response.body().getCount(), Toast.LENGTH_SHORT).show();
+
+                                    } else {
+                                        try {
+                                            Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Bill> call, Throwable t) {
+
+                                }
+                            });
+
+                        } else {
+                            try {
+                                Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
             }
         });
 

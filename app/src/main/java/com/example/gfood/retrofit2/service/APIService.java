@@ -1,6 +1,8 @@
 package com.example.gfood.retrofit2.service;
 
 import com.example.gfood.retrofit2.model.Account;
+import com.example.gfood.retrofit2.model.Bill;
+import com.example.gfood.retrofit2.model.Card;
 import com.example.gfood.retrofit2.model.Cart;
 import com.example.gfood.retrofit2.model.Password;
 import com.example.gfood.retrofit2.model.Product;
@@ -48,6 +50,18 @@ public interface APIService {
     @POST("api/item/")
     Call<ResponseBody> addProdToCart(@Header("Authorization") String token,
                                      @Body ProductsQuantity productsQuantity);
+
+    // Add Card
+    @Headers("Content-Type: application/json")
+    @POST("api/user/card/")
+    Call<ResponseBody> addCard(@Header("Authorization") String token,
+                               @Body Card card);
+
+    // Payment
+    @POST("api/bill/")
+    Call<Bill> payment(@Header("Authorization") String token);
+
+
     // get list product in cart
     @GET("api/cart/")
     Call<Cart> getListProductInCart(@Header("Authorization") String token);
@@ -63,6 +77,10 @@ public interface APIService {
     // Get user info
     @GET("api.v2/user/")
     Call<UserInfo> getUserInfo(@Header("Authorization") String token);
+
+    // Get info card
+    @GET("api/user/mycard/")
+    Call<ResponseBody> getInfoCard(@Header("Authorization") String token);
 
     // Delete product in cart
     @DELETE

@@ -31,31 +31,36 @@ public class SplashScreenActivity extends AppCompatActivity {
         final HomeFragment homeFragment = new HomeFragment();
 
         apiService = APIutils.getAPIService();
-        apiService.getlListProduct("api/product/").enqueue(new Callback<Product>() {
-            @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
-                homeFragment.productList = response.body().getResults();
-                apiService.getlListProduct("api/product/?page=2").enqueue(new Callback<Product>() {
-                    @Override
-                    public void onResponse(Call<Product> call, Response<Product> response) {
-                        for(int i = 0; i < 10; i++){
-                            ResultProduct resultProduct = response.body().getResults().get(i);
-                            homeFragment.productList.add(resultProduct);
+        try{
+            apiService.getlListProduct("api/product/").enqueue(new Callback<Product>() {
+                @Override
+                public void onResponse(Call<Product> call, Response<Product> response) {
+                    homeFragment.productList = response.body().getResults();
+                    apiService.getlListProduct("api/product/?page=2").enqueue(new Callback<Product>() {
+                        @Override
+                        public void onResponse(Call<Product> call, Response<Product> response) {
+                            for(int i = 0; i < 10; i++){
+                                ResultProduct resultProduct = response.body().getResults().get(i);
+                                homeFragment.productList.add(resultProduct);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Product> call, Throwable t) {
-                        Log.e("Run", "Wrong");
-                    }
-                });
-            }
+                        @Override
+                        public void onFailure(Call<Product> call, Throwable t) {
+                            Log.e("Run", "Wrong");
+                        }
+                    });
+                }
 
-            @Override
-            public void onFailure(Call<Product> call, Throwable t) {
-                Log.e("Run", "Wrong");
-            }
-        });
+                @Override
+                public void onFailure(Call<Product> call, Throwable t) {
+                    Log.e("Run", "Wrong");
+                }
+            });
+        } catch (Exception e){
+
+        }
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
