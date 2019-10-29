@@ -56,6 +56,7 @@ public class CartFragment extends Fragment {
     private OnItemClick onItemClick;
     private FragmentTransaction fragmentTransaction;
     private int total = 0;
+    private boolean isRefresh = false;
 
     public CartFragment() {
         // Required empty public constructor
@@ -243,13 +244,14 @@ public class CartFragment extends Fragment {
                                 @Override
                                 public void onResponse(Call<Bill> call, Response<Bill> response) {
                                     if(response.isSuccessful()){
-
-                                            Toast.makeText(getContext(), response.body().getCount(), Toast.LENGTH_SHORT).show();
+                                        fragmentTransaction.detach(CartFragment.this).attach(CartFragment.this).commit();
+                                        Toast.makeText(getContext(), "Payment successfull", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
 
                                     } else {
                                         try {
                                             Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_SHORT).show();
-                                        } catch (IOException e) {
+                                        } catch (Exception e) {
                                             e.printStackTrace();
                                         }
                                     }
@@ -288,5 +290,46 @@ public class CartFragment extends Fragment {
 
 
 
+    }
+
+    // Refresh Card when add product from RestaurantPageActivity
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (isRefresh){
+            final String token = sharedPreferences.getString("Token_Access", "");
+            apiService.getListProductInCart(token).enqueue(new Callback<Cart>() {
+                @Override
+                public void onResponse(Call<Cart> call, Response<Cart> response) {
+
+                    int quantityOld = resultCartList.size();
+                    int quantityNew = response.body().getCount();
+
+                    for(int i = quantityOld; i < quantityNew; i++){
+                        resultCartList.add(response.body().getResults().get(i));
+                    }
+                    cartAdapter.notifyDataSetChanged();
+                    for(int i = 0; i < response.body().getCount(); i++){
+                        int quantity = response.body().getResults().get(i).getQuantity();
+                        int price = response.body().getResults().get(i).getPrice();
+                        total = total + (quantity * price);
+                    }
+                    tvTotal.setText(total+"");
+                    total = 0;
+                }
+
+                @Override
+                public void onFailure(Call<Cart> call, Throwable t) {
+                    Log.e("Error: ", t.getMessage());
+                }
+            });
+        }
+        isRefresh = false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isRefresh = true;
     }
 }

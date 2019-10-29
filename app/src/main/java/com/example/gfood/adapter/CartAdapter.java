@@ -120,7 +120,7 @@ public class CartAdapter extends BaseAdapter {
         viewHolder.tvResName.setText(restaurant);
         viewHolder.tvProdPrice.setText(price + "");
         viewHolder.tvQuantity.setText(quantity + "");
-        Picasso.with(context).load(WEBSITE + imgUrl).into(viewHolder.imgCartList);
+        Picasso.with(context).load(WEBSITE + imgUrl).resize(200, 200).into(viewHolder.imgCartList);
 
         //Total all item in cart
         int total = 0;

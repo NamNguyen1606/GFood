@@ -121,13 +121,13 @@
         android:background="@drawable/ripple_effect_raise"/>
 
     <TextView
-        android:id="@+id/tvProfHistory"
+        android:id="@+id/tvProfBill"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="15"
         android:paddingLeft="15dp"
         android:paddingTop="10dp"
-        android:text="History"
+        android:text="Bill"
         android:textSize="20sp"
         android:background="@drawable/ripple_effect_raise"/>
 

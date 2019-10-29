@@ -33,7 +33,6 @@ import retrofit2.Response;
  */
 public class SignUpFragment extends Fragment {
 
-
     private EditText edtUsername, edtPassword, edtConfirmPassword;
     private Button btn_signUp;
     private APIService mApiServer;
@@ -92,6 +91,8 @@ public class SignUpFragment extends Fragment {
                                                 sharedPreferences.edit().putString("Password", edtPassword.getText().toString()).apply();
                                                 sharedPreferences.edit().putString("Token_Access", "Bearer " + response.body().getAccess()).apply();
                                                 sharedPreferences.edit().putString("Token_Refresh", "Bearer " + response.body().getRefresh()).apply();
+
+
 
                                                 Intent intent = new Intent(getActivity(), HomePageActivity.class);
                                                 startActivity(intent);

@@ -11,6 +11,7 @@ import com.example.gfood.retrofit2.model.Quantity;
 import com.example.gfood.retrofit2.model.Restaurant;
 import com.example.gfood.retrofit2.model.Token;
 import com.example.gfood.retrofit2.model.UserInfo;
+import com.example.gfood.retrofit2.model.UserInfomation;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -21,8 +22,10 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Url;
 
 public interface APIService {
@@ -42,7 +45,7 @@ public interface APIService {
     // Change password
     @Headers("Content-Type: application/json")
     @POST("api/user/changepwd/")
-    Call<ResponseBody> changePassword(@Header ("Authorization") String token,
+    Call<ResponseBody> changePassword(@Header("Authorization") String token,
                                       @Body Password password);
 
     // Add Product to cart
@@ -90,5 +93,9 @@ public interface APIService {
     @Headers("Content-Type: application/json")
     @PUT
     Call<ResponseBody> editProductQuantity(@Header("Authorization") String token, @Url String url, @Body Quantity quantity);
-}
 
+    // Edit profile
+    @Headers("Content-Type: application/json")
+    @PATCH
+    Call<UserInfo> editProfile(@Header("Authorization") String token, @Url String url,  @Body UserInfomation userInfomation);
+}

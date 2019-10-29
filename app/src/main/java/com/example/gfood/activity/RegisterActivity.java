@@ -7,12 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.example.gfood.R;
 import com.example.gfood.retrofit2.model.Token;
+import com.example.gfood.retrofit2.model.UserInfo;
 import com.example.gfood.retrofit2.service.APIService;
 import com.example.gfood.retrofit2.service.APIutils;
 
@@ -21,6 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
+
     private FrameLayout frameLayout;
     private SharedPreferences sharedPreferences;
     private APIService apiService;

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +22,7 @@ import android.widget.TextView;
 
 import com.example.gfood.R;
 import com.example.gfood.retrofit2.model.UserInfo;
+import com.example.gfood.retrofit2.model.UserInfomation;
 import com.example.gfood.retrofit2.service.APIService;
 import com.example.gfood.retrofit2.service.APIutils;
 import com.squareup.picasso.Picasso;
@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment {
 
     private final String WEBSITE_URL = "https://softwaredevelopmentproject.azurewebsites.net/";
     private ImageView imgAvatarUser;
-    private TextView tvUsername, tvAddress, tvPhoneNumber, tvChangePwd, tvPayment, tvHistory, tvSignOut;
+    private TextView tvUsername, tvAddress, tvPhoneNumber, tvChangePwd, tvPayment, tvBill, tvSignOut;
     private Button btnEdit;
     private SharedPreferences sharedPreferences;
     private APIService apiService;
@@ -66,7 +66,7 @@ public class ProfileFragment extends Fragment {
         tvAddress = (TextView) view.findViewById(R.id.tvProfAddress);
         tvChangePwd = (TextView) view.findViewById(R.id.tvProfChangePwd);
         tvPayment = (TextView) view.findViewById(R.id.tvProfPayment);
-        tvHistory = (TextView) view.findViewById(R.id.tvProfHistory);
+        tvBill = (TextView) view.findViewById(R.id.tvProfBill);
         tvSignOut = (TextView) view.findViewById(R.id.tvProfSignOut);
         btnEdit = (Button) view.findViewById(R.id.btnProfEdit);
 
@@ -85,44 +85,31 @@ public class ProfileFragment extends Fragment {
                 String address = " ";
                 String imgAvatar = " ";
 
-                // Reset value for append
-                tvAddress.setText("Address: ");
-                tvPhoneNumber.setText("Phone Number: ");
-
                 // check null
+                //ID
+                sharedPreferences.edit().putString("ID_User", response.body().getId()+"").apply();
                 //Name
                 if((response.body().getName() == null) == false){
                     name = response.body().getName().toString();
-                    tvUsername.setText(name);
-                    sharedPreferences.edit().putString("Name_Info", name);
-                } else {
-                    tvUsername.setText(userName);
+                    sharedPreferences.edit().putString("Name_Info", name).apply();
                 }
 
                 // Phone number
                 if((response.body().getPhone() == null) == false){
                     phone = response.body().getPhone().toString();
-                    tvPhoneNumber.append(phone);
-                    sharedPreferences.edit().putString("Phone_Info", phone);
+                    sharedPreferences.edit().putString("Phone_Info", phone).apply();
                 }
 
                 // Address
                 if((response.body().getAddress() == null) == false){
                     address = response.body().getAddress().toString();
-                    tvAddress.append(address);
-                    sharedPreferences.edit().putString("Address_Info", phone);
+                    sharedPreferences.edit().putString("Address_Info", address).apply();
                 }
 
                 // Avatar
                 if((response.body().getImage().isEmpty()) == false){
                     imgAvatar = response.body().getImage();
-                    sharedPreferences.edit().putString("AvatarImage_Info", WEBSITE_URL + imgAvatar);
-                    try{
-                        Picasso.with(getContext().getApplicationContext()).load(WEBSITE_URL + imgAvatar).resize(250, 200).into(imgAvatarUser);
-                    }catch (Exception e){
-
-                    }
-
+                    sharedPreferences.edit().putString("AvatarImage_Info", WEBSITE_URL + imgAvatar).apply();
                 }
             }
 
@@ -138,6 +125,21 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        String name = sharedPreferences.getString("Name_Info", " ");
+        String phone =sharedPreferences.getString("Phone_Info", " ");
+        String address = sharedPreferences.getString("Address_Info", " ");
+        String imgAvatar = sharedPreferences.getString("AvatarImage_Info", " ");
+
+        tvUsername.setText(name);
+        tvPhoneNumber.setText("Phone number: "+phone);
+        tvAddress.setText("Address: " + address);
+        try{
+            Picasso.with(getContext().getApplicationContext()).load(imgAvatar).resize(250, 200).into(imgAvatarUser);
+        } catch (Exception e){
+
+        }
+
 
         //Change avatar
         imgAvatarUser.setOnClickListener(new View.OnClickListener() {
@@ -194,9 +196,9 @@ public class ProfileFragment extends Fragment {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_edit_profile);
 
-        EditText tvName = (EditText) dialog.findViewById(R.id.edtProfEditName);
-        EditText tvPhoneNumber = (EditText) dialog.findViewById(R.id.edtProfEditPhoneNumber);
-        EditText tvAddress = (EditText) dialog.findViewById(R.id.edtProfEditAddress);
+        final EditText edtName = (EditText) dialog.findViewById(R.id.edtProfEditName);
+        final EditText edtPhoneNumber = (EditText) dialog.findViewById(R.id.edtProfEditPhoneNumber);
+        final EditText edtAddress = (EditText) dialog.findViewById(R.id.edtProfEditAddress);
         Button btnSave = (Button) dialog.findViewById(R.id.btnProfEditSave);
         Button btnCancel = (Button) dialog.findViewById(R.id.btnProfEditCancel);
         dialog.show();
@@ -205,6 +207,36 @@ public class ProfileFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String id = sharedPreferences.getString("ID_User", " ");
+                String name = edtName.getText().toString();
+                String phone = edtPhoneNumber.getText().toString();
+                String address = edtAddress.getText().toString();
+                String imgAvatar = sharedPreferences.getString("AvatarImage_Info", " ");
+
+
+                UserInfomation userInfo = new UserInfomation(name, phone, address, "");
+                String url = "api/user/" + id;
+                Log.e("URL", url);
+                String token = sharedPreferences.getString("Token_Access", "");
+
+                // Edit profile
+                apiService.editProfile(token,url,userInfo).enqueue(new Callback<UserInfo>() {
+                    @Override
+                    public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                        if(response.isSuccessful()){
+                            Log.e("edit profile", "Done" + response.body().getName());
+                        } else {
+                            Log.e("edit profile", "Fail");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserInfo> call, Throwable t) {
+
+                    }
+                });
+
+                dialog.dismiss();
             }
         });
 

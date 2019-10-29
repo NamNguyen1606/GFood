@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.gfood.R;
 import com.example.gfood.retrofit2.model.Account;
 import com.example.gfood.retrofit2.model.Token;
+import com.example.gfood.retrofit2.model.UserInfo;
 import com.example.gfood.retrofit2.service.APIService;
 import com.example.gfood.retrofit2.service.APIutils;
 
@@ -34,7 +35,7 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class SignInFragment extends Fragment {
-
+    private final String WEBSITE_URL = "https://softwaredevelopmentproject.azurewebsites.net/";
     private EditText edtUsername, edtPassword;
     private Button btnSignIn;
     private TextView tvSignUp;
@@ -91,6 +92,51 @@ public class SignInFragment extends Fragment {
                             sharedPreferences.edit().putString("Password", edtPassword.getText().toString()).apply();
                             sharedPreferences.edit().putString("Token_Access", "Bearer " + response.body().getAccess()).apply();
                             sharedPreferences.edit().putString("Token_Refresh", "Bearer " + response.body().getRefresh()).apply();
+
+                            // Get Profile
+                            String token = sharedPreferences.getString("Token_Access", "");
+                            mAPIServer.getUserInfo(token).enqueue(new Callback<UserInfo>() {
+                                @Override
+                                public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                                    String name = (String) response.body().getName();
+                                    String phone = " ";
+                                    String address = " ";
+                                    String imgAvatar = " ";
+
+                                    // check null
+                                    //ID
+                                    sharedPreferences.edit().putString("ID_User", response.body().getId()+"").apply();
+                                    //Name
+                                    if((response.body().getName() == null) == false){
+                                        name = response.body().getName().toString();
+                                        sharedPreferences.edit().putString("Name_Info", name).apply();
+                                        Log.e("NAME LL", name);
+                                    }
+
+                                    // Phone number
+                                    if((response.body().getPhone() == null) == false){
+                                        phone = response.body().getPhone().toString();
+                                        sharedPreferences.edit().putString("Phone_Info", phone).apply();
+                                    }
+
+                                    // Address
+                                    if((response.body().getAddress() == null) == false){
+                                        address = response.body().getAddress().toString();
+                                        sharedPreferences.edit().putString("Address_Info", address).apply();
+                                    }
+
+                                    // Avatar
+                                    if((response.body().getImage().isEmpty()) == false){
+                                        imgAvatar = response.body().getImage();
+                                        sharedPreferences.edit().putString("AvatarImage_Info", WEBSITE_URL + imgAvatar).apply();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<UserInfo> call, Throwable t) {
+                                    Log.e("ERROR:", "Profile");
+                                }
+                            });
 
                             Intent intent = new Intent(getActivity(), HomePageActivity.class);
                             startActivity(intent);

@@ -52,7 +52,6 @@ public class HomeFragment extends Fragment {
     public OnProductClick onProductClick;
     private Fragment fragment;
     private FragmentTransaction fragmentTransaction;
-    private ListenerRefresh listenerRefresh;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -178,15 +177,4 @@ public class HomeFragment extends Fragment {
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragment = getActivity().getSupportFragmentManager().getFragments().get(1);
-        fragmentTransaction.detach(fragment).attach(fragment).commit();
-    }
-
-    public interface ListenerRefresh{
-        void onClickRefresh();
-    }
 }
