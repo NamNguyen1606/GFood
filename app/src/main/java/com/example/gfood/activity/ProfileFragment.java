@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +19,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gfood.R;
+import com.example.gfood.retrofit2.model.Bill;
+import com.example.gfood.retrofit2.model.Card;
+import com.example.gfood.retrofit2.model.MyCard;
 import com.example.gfood.retrofit2.model.UserInfo;
 import com.example.gfood.retrofit2.model.UserInfomation;
 import com.example.gfood.retrofit2.service.APIService;
@@ -33,7 +36,9 @@ import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,12 +51,12 @@ public class ProfileFragment extends Fragment {
 
     private final String WEBSITE_URL = "https://softwaredevelopmentproject.azurewebsites.net/";
     private ImageView imgAvatarUser;
-    private TextView tvUsername, tvAddress, tvPhoneNumber, tvChangePwd, tvPayment, tvBill, tvSignOut;
+    private TextView tvUsername, tvAddress, tvPhoneNumber, tvChangePwd, tvMyCard, tvBill, tvSignOut;
     private Button btnEdit;
     private SharedPreferences sharedPreferences;
     private APIService apiService;
     private Bitmap avatar;
-    private String img;
+    private MyCard myCard;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -67,13 +72,14 @@ public class ProfileFragment extends Fragment {
         tvPhoneNumber = (TextView) view.findViewById(R.id.tvProfPhone);
         tvAddress = (TextView) view.findViewById(R.id.tvProfAddress);
         tvChangePwd = (TextView) view.findViewById(R.id.tvProfChangePwd);
-        tvPayment = (TextView) view.findViewById(R.id.tvProfPayment);
+        tvMyCard = (TextView) view.findViewById(R.id.tvProfMyCard);
         tvBill = (TextView) view.findViewById(R.id.tvProfBill);
         tvSignOut = (TextView) view.findViewById(R.id.tvProfSignOut);
         btnEdit = (Button) view.findViewById(R.id.btnProfEdit);
 
         Context context = getActivity();
         sharedPreferences = context.getSharedPreferences("Acount_info", Context.MODE_PRIVATE);
+
 
         String token = sharedPreferences.getString("Token_Access", "");
         apiService = APIutils.getAPIService();
@@ -218,9 +224,37 @@ public class ProfileFragment extends Fragment {
                 dialogEdit();
             }
         });
+
+        // My Card
+        tvMyCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String token = sharedPreferences.getString("Token_Access", "");
+                apiService.getInfoCard(token).enqueue(new Callback<MyCard>() {
+                    @Override
+                    public void onResponse(Call<MyCard> call, Response<MyCard> response) {
+                        if(response.isSuccessful()){
+                            String cardNumber = response.body().getNumber();
+                            String month = response.body().getExpMonth() ;
+                            String year = response.body().getExpYear();
+                            String brand = response.body().getBrand();
+                            myCard = new MyCard(cardNumber, month, year, brand);
+                            dialogMyCard();
+                        } else {
+                            dialogAddCard();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MyCard> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
     }
 
-
+    // Dialog edit profile
     private void dialogEdit(){
         Context context;
         final Dialog dialog = new Dialog(getContext());
@@ -285,6 +319,116 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+    // Dialog Card Info
+    private void dialogMyCard(){
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_my_card);
+        final EditText edtCardNumber = (EditText) dialog.findViewById(R.id.edtDiaMyCardNumber);
+        final EditText edtExpMonth = (EditText) dialog.findViewById(R.id.edtDiaMyCardMonth);
+        final EditText edtExpYear = (EditText) dialog.findViewById(R.id.edtDiaMyCardYear);
+        final EditText edtBrand = (EditText) dialog.findViewById(R.id.edtDiaMyCardBrand);
+
+        Button btnDelete = (Button) dialog.findViewById(R.id.btnPayDiaDelete);
+        Button btnCancel = (Button) dialog.findViewById(R.id.btnPayDiaCancel);
+
+        edtCardNumber.setText(myCard.getNumber());
+        edtExpMonth.setText(myCard.getExpMonth());
+        edtExpYear.setText(myCard.getExpYear());
+        edtBrand.setText(myCard.getBrand());
+        dialog.show();
+
+        // Delete Card
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String token = sharedPreferences.getString("Token_Access", "");
+                apiService.deleteMyCard(token).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()){
+                            Log.e("DELETE CARD", response.message());
+                            dialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+
+    // Dialog Add Card
+    private void dialogAddCard(){
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_payment);
+
+        final EditText edtCardNumber = (EditText) dialog.findViewById(R.id.edtPayDiaCardNumber);
+        final EditText edtExpMonth = (EditText) dialog.findViewById(R.id.edtPayDiaMonth);
+        final EditText edtExpYear = (EditText) dialog.findViewById(R.id.edtPayDiaYear);
+        final EditText edtCVV = (EditText) dialog.findViewById(R.id.edtPayDiaCVV);
+        Button btnPayment = (Button) dialog.findViewById(R.id.btnPayDiaPayment);
+        Button btnCancel = (Button) dialog.findViewById(R.id.btnPayDiaCancel);
+        btnPayment.setText("SAVE");
+        dialog.show();
+
+
+        // Add Card
+        btnPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                long numberCard = Long.parseLong(edtCardNumber.getText().toString());
+                int expMonth = Integer.parseInt(edtExpMonth.getText().toString());
+                int expYear = Integer.parseInt(edtExpYear.getText().toString());
+                int cvv = Integer.parseInt(edtCVV.getText().toString());
+
+                final Card card = new Card(numberCard, expMonth, expYear, cvv);
+                final String token = sharedPreferences.getString("Token_Access", "");
+
+                apiService.addCard(token, card).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()){
+                                dialog.dismiss();
+                        } else {
+                            try {
+                                Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+    }
+
 
     private String encodeImage(Bitmap bm){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

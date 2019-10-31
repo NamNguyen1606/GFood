@@ -26,6 +26,7 @@ import com.example.gfood.adapter.ProductAdapter;
 import com.example.gfood.retrofit2.model.Bill;
 import com.example.gfood.retrofit2.model.Card;
 import com.example.gfood.retrofit2.model.Cart;
+import com.example.gfood.retrofit2.model.MyCard;
 import com.example.gfood.retrofit2.model.Quantity;
 import com.example.gfood.retrofit2.model.ResultCart;
 import com.example.gfood.retrofit2.service.APIService;
@@ -158,9 +159,9 @@ public class CartFragment extends Fragment {
                     public void run() {
                         final String token = sharedPreferences.getString("Token_Access", "");
 
-                        apiService.getInfoCard(token).enqueue(new Callback<ResponseBody>() {
+                        apiService.getInfoCard(token).enqueue(new Callback<MyCard>() {
                             @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            public void onResponse(Call<MyCard> call, Response<MyCard> response) {
                                 // Check: do account have card?
                                 if(response.isSuccessful()){
 
@@ -196,7 +197,7 @@ public class CartFragment extends Fragment {
                             }
 
                             @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            public void onFailure(Call<MyCard> call, Throwable t) {
 
                             }
                         });
@@ -286,9 +287,6 @@ public class CartFragment extends Fragment {
                 dialog.dismiss();
             }
         });
-
-
-
 
     }
 

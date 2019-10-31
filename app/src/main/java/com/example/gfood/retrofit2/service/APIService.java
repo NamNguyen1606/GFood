@@ -4,6 +4,7 @@ import com.example.gfood.retrofit2.model.Account;
 import com.example.gfood.retrofit2.model.Bill;
 import com.example.gfood.retrofit2.model.Card;
 import com.example.gfood.retrofit2.model.Cart;
+import com.example.gfood.retrofit2.model.MyCard;
 import com.example.gfood.retrofit2.model.Password;
 import com.example.gfood.retrofit2.model.Product;
 import com.example.gfood.retrofit2.model.ProductsQuantity;
@@ -83,11 +84,16 @@ public interface APIService {
 
     // Get info card
     @GET("api/user/mycard/")
-    Call<ResponseBody> getInfoCard(@Header("Authorization") String token);
+    Call<MyCard> getInfoCard(@Header("Authorization") String token);
+
 
     // Delete product in cart
     @DELETE
     Call<ResponseBody> deleteProductInCart(@Header("Authorization") String token, @Url String url);
+
+    //Delete card
+    @DELETE("api/user/mycard/")
+    Call<ResponseBody> deleteMyCard(@Header("Authorization") String token);
 
     // Edit product quantity
     @Headers("Content-Type: application/json")

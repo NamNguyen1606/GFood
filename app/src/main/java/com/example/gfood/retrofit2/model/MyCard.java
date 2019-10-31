@@ -4,15 +4,22 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class MyCard {
+    public MyCard(String number, String expMonth, String expYear, String brand) {
+        this.number = number;
+        this.expMonth = expMonth;
+        this.expYear = expYear;
+        this.brand = brand;
+    }
+
     @SerializedName("number")
     @Expose
     private String number;
     @SerializedName("exp_month")
     @Expose
-    private Integer expMonth;
+    private String expMonth;
     @SerializedName("exp_year")
     @Expose
-    private Integer expYear;
+    private String expYear;
     @SerializedName("brand")
     @Expose
     private String brand;
@@ -25,19 +32,19 @@ public class MyCard {
         this.number = number;
     }
 
-    public Integer getExpMonth() {
+    public String getExpMonth() {
         return expMonth;
     }
 
-    public void setExpMonth(Integer expMonth) {
+    public void setExpMonth(String expMonth) {
         this.expMonth = expMonth;
     }
 
-    public Integer getExpYear() {
+    public String getExpYear() {
         return expYear;
     }
 
-    public void setExpYear(Integer expYear) {
+    public void setExpYear(String expYear) {
         this.expYear = expYear;
     }
 

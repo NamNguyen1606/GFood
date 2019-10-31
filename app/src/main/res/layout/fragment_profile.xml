@@ -110,13 +110,13 @@
         android:background="@drawable/ripple_effect_raise"/>
 
     <TextView
-        android:id="@+id/tvProfPayment"
+        android:id="@+id/tvProfMyCard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="15"
         android:paddingLeft="15dp"
         android:paddingTop="10dp"
-        android:text="Payment"
+        android:text="My Card"
         android:textSize="20sp"
         android:background="@drawable/ripple_effect_raise"/>
 
