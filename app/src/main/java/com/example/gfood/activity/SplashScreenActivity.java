@@ -19,7 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SplashScreenActivity extends AppCompatActivity {
-    private static  int SPLASH_TIME_OUT = 2000;
+    private static  int SPLASH_TIME_OUT = 3000;
     private APIService apiService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,20 +36,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Product> call, Response<Product> response) {
                     homeFragment.productList = response.body().getResults();
-                    apiService.getlListProduct("api/product/?page=2").enqueue(new Callback<Product>() {
-                        @Override
-                        public void onResponse(Call<Product> call, Response<Product> response) {
-                            for(int i = 0; i < 10; i++){
-                                ResultProduct resultProduct = response.body().getResults().get(i);
-                                homeFragment.productList.add(resultProduct);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Product> call, Throwable t) {
-                            Log.e("Run", "Wrong");
-                        }
-                    });
                 }
 
                 @Override

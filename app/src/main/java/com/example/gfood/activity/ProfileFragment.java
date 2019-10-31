@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,6 +51,7 @@ public class ProfileFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private APIService apiService;
     private Bitmap avatar;
+    private String img;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -153,6 +155,34 @@ public class ProfileFragment extends Fragment {
                         Picasso.with(getContext()).load(r.getUri()).resize(250, 200).into(imgAvatarUser);
                         String avatarBase64 = encodeImage(avatar);
                         Log.e("BASE64", avatarBase64);
+                        // Sent New Avatar
+                        String id = sharedPreferences.getString("ID_User", "");
+                        String name = sharedPreferences.getString("Name_Info", " ");
+                        String phone =sharedPreferences.getString("Phone_Info", " ");
+                        String address = sharedPreferences.getString("Address_Info", " ");
+
+                        final UserInfomation userInfo = new UserInfomation(name, phone, address, avatarBase64);
+                        String url = "api/user/" + id +"/";
+                        String token = sharedPreferences.getString("Token_Access", "");
+
+                        // Edit profile
+                        apiService.editProfile(token,url,userInfo).enqueue(new Callback<UserInfo>() {
+                            @Override
+                            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                                if(response.isSuccessful()){
+                                    // Save new profile
+                                    Log.e("edit profile", "True");
+                                } else {
+                                    Log.e("edit profile", "Fail");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<UserInfo> call, Throwable t) {
+
+                            }
+                        });
+
                     }
                 }).show(getActivity().getSupportFragmentManager());
 
@@ -211,12 +241,11 @@ public class ProfileFragment extends Fragment {
                 String name = edtName.getText().toString();
                 String phone = edtPhoneNumber.getText().toString();
                 String address = edtAddress.getText().toString();
-                String imgAvatar = sharedPreferences.getString("AvatarImage_Info", " ");
 
 
-                UserInfomation userInfo = new UserInfomation(name, phone, address, "");
-                String url = "api/user/" + id;
-                Log.e("URL", url);
+                final UserInfomation userInfo = new UserInfomation(name, phone, address, "");
+                String url = "api/user/" + id +"/";
+
                 String token = sharedPreferences.getString("Token_Access", "");
 
                 // Edit profile
@@ -224,7 +253,16 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
                         if(response.isSuccessful()){
-                            Log.e("edit profile", "Done" + response.body().getName());
+                            // Save new profile
+                            sharedPreferences.edit().putString("Name_Info", userInfo.getName()).apply();
+                            sharedPreferences.edit().putString("Phone_Info", userInfo.getPhoneNumber()).apply();
+                            sharedPreferences.edit().putString("Address_Info", userInfo.getAddress()).apply();
+
+                            // Refresh text view
+                            tvUsername.setText(userInfo.getName());
+                            tvPhoneNumber.setText("Phone number: "+ userInfo.getPhoneNumber());
+                            tvAddress.setText("Address: " + userInfo.getAddress());
+
                         } else {
                             Log.e("edit profile", "Fail");
                         }
@@ -235,7 +273,6 @@ public class ProfileFragment extends Fragment {
 
                     }
                 });
-
                 dialog.dismiss();
             }
         });
@@ -253,8 +290,7 @@ public class ProfileFragment extends Fragment {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100 , baos);
         byte[] b = baos.toByteArray();
-        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
-        return encImage;
+        return Base64.encodeToString(b, Base64.NO_WRAP);
     }
 
 }

@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.example.gfood.R;
@@ -18,7 +19,6 @@ import eu.long1.spacetablayout.SpaceTabLayout;
 
 public class HomePageActivity extends AppCompatActivity {
     SpaceTabLayout tabLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +33,8 @@ public class HomePageActivity extends AppCompatActivity {
         fragmentList.add(new ProfileFragment());
 
         tabLayout.initialize(viewPager, getSupportFragmentManager(), fragmentList, savedInstanceState);
+
+
     }
 
 }

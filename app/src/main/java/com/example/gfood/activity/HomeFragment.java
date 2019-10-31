@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,10 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gfood.R;
 import com.example.gfood.adapter.ProductAdapter;
@@ -52,7 +57,11 @@ public class HomeFragment extends Fragment {
     public OnProductClick onProductClick;
     private Fragment fragment;
     private FragmentTransaction fragmentTransaction;
-
+    private View footerView;
+    private boolean isloading = false;
+    private boolean limitData = false;
+    private mHandler mHandler;
+    private int pageNumber = 2;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -67,19 +76,23 @@ public class HomeFragment extends Fragment {
         tvFood = (TextView) view.findViewById(R.id.fragHome_search_tvFoodTab);
         edtSearch = (EditText) view.findViewById(R.id.fragHome_search_edtSearch);
         listView = (ListView) view.findViewById(R.id.fragHome_listview);
+        //footer
+        LayoutInflater inflaterFooter = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        footerView = inflaterFooter.inflate(R.layout.progressbar, null);
 
         // fill data to product listview
         productAdapter = new ProductAdapter(getActivity(), R.layout.listview_product, productList);
         listView.setAdapter(productAdapter);
         productAdapter.notifyDataSetChanged();
 
+        mHandler = new mHandler();
         Context context = getContext();
         sharedPreferences = context.getSharedPreferences("Acount_info", Context.MODE_PRIVATE);
         Log.e("Token Access: ", sharedPreferences.getString("Token_Access", ""));
 
         apiService = APIutils.getAPIService();
 
-        apiService.getlListProduct("api/product/?page=3").enqueue(new Callback<Product>() {
+        apiService.getlListProduct("api/product/?page=2").enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
                 for(int i = 0; i < 10; i++){
@@ -109,6 +122,8 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        loadMoreData();
+
         // Fill data to list product
         tvFood.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,11 +131,14 @@ public class HomeFragment extends Fragment {
                 apiService.getlListProduct("api/product/").enqueue(new Callback<Product>() {
                     @Override
                     public void onResponse(Call<Product> call, Response<Product> response) {
-                        Log.e("Run", "DO IT");
                         productList = response.body().getResults();
                         productAdapter = new ProductAdapter(getActivity(), R.layout.listview_product, productList);
                         listView.setAdapter(productAdapter);
                         productAdapter.productClick = onProductClick;
+                        productAdapter.notifyDataSetChanged();
+                        isloading = false;
+                        limitData = false;
+                        pageNumber = 1;
                     }
 
                     @Override
@@ -176,5 +194,84 @@ public class HomeFragment extends Fragment {
         };
 
     }
+    // loadmore data for product list
+    public void loadMoreData(){
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if((firstVisibleItem + visibleItemCount == totalItemCount) && totalItemCount != 0 && isloading == false  && limitData == false){
+                    isloading = true;
+                    ThreadData threadData = new ThreadData();
+                    threadData.start();
+                } else {
+                }
+            }
+        });
+    }
+
+    public class mHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what){
+                case 0:
+                    listView.addFooterView(footerView);
+                    break;
+                case 1:
+                    //get data
+                    getProductData(++pageNumber);
+                    Log.e("Loading", "WORK");
+                    isloading = false;
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    }
+
+    public class ThreadData extends Thread{
+        @Override
+        public void run() {
+            mHandler.sendEmptyMessage(0);
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Message message = mHandler.obtainMessage(1);
+            mHandler.sendMessage(message);
+            super.run();
+        }
+    }
+
+    public void getProductData(int pageNumber){
+        apiService.getlListProduct("api/product/?page=" + pageNumber).enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                for(int i = 0; i < 10; i++){
+                    if(response.body().getNext() == null){
+                        limitData = true;
+                        listView.removeFooterView(footerView);
+                    } else {
+                        try{
+                            ResultProduct resultProduct = response.body().getResults().get(i);
+                            productList.add(resultProduct);
+                            listView.removeFooterView(footerView);
+                        } catch (Exception e){
+                        }
+                        
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                Log.e("Run", "Wrong");
+            }
+        });
+    }
 }
