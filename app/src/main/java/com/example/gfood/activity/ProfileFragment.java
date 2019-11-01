@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gfood.R;
-import com.example.gfood.retrofit2.model.Bill;
 import com.example.gfood.retrofit2.model.Card;
 import com.example.gfood.retrofit2.model.MyCard;
 import com.example.gfood.retrofit2.model.UserInfo;
@@ -252,6 +251,15 @@ public class ProfileFragment extends Fragment {
                 });
             }
         });
+
+        //Bill
+        tvBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), BillActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
     }
 
     // Dialog edit profile
@@ -325,10 +333,10 @@ public class ProfileFragment extends Fragment {
 
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_my_card);
-        final EditText edtCardNumber = (EditText) dialog.findViewById(R.id.edtDiaMyCardNumber);
-        final EditText edtExpMonth = (EditText) dialog.findViewById(R.id.edtDiaMyCardMonth);
-        final EditText edtExpYear = (EditText) dialog.findViewById(R.id.edtDiaMyCardYear);
-        final EditText edtBrand = (EditText) dialog.findViewById(R.id.edtDiaMyCardBrand);
+        final EditText edtCardNumber = (EditText) dialog.findViewById(R.id.tvDiaMyCardNumber);
+        final EditText edtExpMonth = (EditText) dialog.findViewById(R.id.tvDiaMyCardMonth);
+        final EditText edtExpYear = (EditText) dialog.findViewById(R.id.tvDiaMyCardYear);
+        final EditText edtBrand = (EditText) dialog.findViewById(R.id.tvDiaMyCardBrand);
 
         Button btnDelete = (Button) dialog.findViewById(R.id.btnPayDiaDelete);
         Button btnCancel = (Button) dialog.findViewById(R.id.btnPayDiaCancel);

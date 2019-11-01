@@ -65,6 +65,10 @@ public interface APIService {
     @POST("api/bill/")
     Call<Bill> payment(@Header("Authorization") String token);
 
+    // Get bill
+    @GET("api/bill/")
+    Call<Bill> getBill(@Header("Authorization") String token);
+
 
     // get list product in cart
     @GET("api/cart/")

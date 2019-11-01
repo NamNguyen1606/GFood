@@ -32,8 +32,8 @@
             android:textColor="#024274"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/edtDiaMyCardNumber"
+        <TextView
+            android:id="@+id/tvDiaMyCardNumber"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="15dp"
@@ -67,8 +67,8 @@
                 android:textColor="#024274"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/edtDiaMyCardMonth"
+            <TextView
+                android:id="@+id/tvDiaMyCardMonth"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_margin="15dp"
@@ -95,8 +95,8 @@
                 android:textColor="#024274"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/edtDiaMyCardYear"
+            <TextView
+                android:id="@+id/tvDiaMyCardYear"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_margin="15dp"
@@ -125,8 +125,8 @@
             android:textColor="#024274"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/edtDiaMyCardBrand"
+        <TextView
+            android:id="@+id/tvDiaMyCardBrand"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="15dp"
