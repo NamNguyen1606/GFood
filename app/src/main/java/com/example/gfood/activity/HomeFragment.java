@@ -60,6 +60,8 @@ public class HomeFragment extends Fragment {
     private View footerView;
     private boolean isloading = false;
     private boolean limitData = false;
+    private boolean isFood = true;
+    private boolean isRestaurant = true;
     private mHandler mHandler;
     private int pageNumber = 2;
     public HomeFragment() {
@@ -128,14 +130,15 @@ public class HomeFragment extends Fragment {
         tvFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isFood = true;
                 apiService.getlListProduct("api/product/").enqueue(new Callback<Product>() {
                     @Override
                     public void onResponse(Call<Product> call, Response<Product> response) {
                         productList = response.body().getResults();
                         productAdapter = new ProductAdapter(getActivity(), R.layout.listview_product, productList);
                         listView.setAdapter(productAdapter);
-                        productAdapter.productClick = onProductClick;
                         productAdapter.notifyDataSetChanged();
+                        productAdapter.productClick = onProductClick;
                         isloading = false;
                         limitData = false;
                         pageNumber = 1;
@@ -153,6 +156,7 @@ public class HomeFragment extends Fragment {
         tvRestaurant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isFood = false;
                 apiService.getListRestaurant().enqueue(new Callback<Restaurant>() {
                     @Override
                     public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
@@ -204,7 +208,11 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if((firstVisibleItem + visibleItemCount == totalItemCount) && totalItemCount != 0 && isloading == false  && limitData == false){
+                if((firstVisibleItem + visibleItemCount == totalItemCount)
+                        && totalItemCount != 0
+                        && isloading == false
+                        && limitData == false
+                        && isFood == true){
                     isloading = true;
                     ThreadData threadData = new ThreadData();
                     threadData.start();
