@@ -70,7 +70,8 @@
                 android:layout_weight="4"
                 android:paddingLeft="10dp"
                 android:textSize="30sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="#272727"/>
 
             <TextView
                 android:id="@+id/tvProfPhone"
