@@ -154,17 +154,24 @@ public class CartAdapter extends BaseAdapter {
             }
         });
 
+
         //Subtract item quantity
+        final ViewHolder finalViewHolder1 = viewHolder;
+        if (resultCartList.get(position).getQuantity() == 1){
+            finalViewHolder1.btnSub.setEnabled(false);
+        }
         viewHolder.btnSub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (resultCartList.get(position).getQuantity() == 1){
+                    finalViewHolder1.btnSub.setEnabled(false);
+                }
 
                 int quantity = resultCartList.get(position).getQuantity();
                 if(quantity > 1){
                     resultCartList.get(position).setQuantity(quantity - 1);
-                    Log.e("Sub" + position, quantity - 1 +"");
                     finalViewHolder.tvQuantity.setText(quantity - 1 +"");
-
+                    finalViewHolder1.btnSub.setEnabled(true);
                     // Total
                     int total = getTotal();
                     int price = resultCartList.get(position).getPrice();

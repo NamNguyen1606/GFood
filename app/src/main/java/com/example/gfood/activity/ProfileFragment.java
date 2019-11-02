@@ -333,18 +333,18 @@ public class ProfileFragment extends Fragment {
 
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_my_card);
-        final EditText edtCardNumber = (EditText) dialog.findViewById(R.id.tvDiaMyCardNumber);
-        final EditText edtExpMonth = (EditText) dialog.findViewById(R.id.tvDiaMyCardMonth);
-        final EditText edtExpYear = (EditText) dialog.findViewById(R.id.tvDiaMyCardYear);
-        final EditText edtBrand = (EditText) dialog.findViewById(R.id.tvDiaMyCardBrand);
+        final TextView tvCardNumber = (TextView) dialog.findViewById(R.id.tvDiaMyCardNumber);
+        final TextView tvExpMonth = (TextView) dialog.findViewById(R.id.tvDiaMyCardMonth);
+        final TextView tvExpYear = (TextView) dialog.findViewById(R.id.tvDiaMyCardYear);
+        final TextView tvBrand = (TextView) dialog.findViewById(R.id.tvDiaMyCardBrand);
 
         Button btnDelete = (Button) dialog.findViewById(R.id.btnPayDiaDelete);
         Button btnCancel = (Button) dialog.findViewById(R.id.btnPayDiaCancel);
 
-        edtCardNumber.setText(myCard.getNumber());
-        edtExpMonth.setText(myCard.getExpMonth());
-        edtExpYear.setText(myCard.getExpYear());
-        edtBrand.setText(myCard.getBrand());
+        tvCardNumber.setText(myCard.getNumber());
+        tvExpMonth.setText(myCard.getExpMonth());
+        tvExpYear.setText(myCard.getExpYear());
+        tvBrand.setText(myCard.getBrand());
         dialog.show();
 
         // Delete Card
