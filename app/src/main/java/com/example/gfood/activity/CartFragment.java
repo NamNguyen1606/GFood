@@ -132,27 +132,27 @@ public class CartFragment extends Fragment {
         btnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int quantityProduct = cartAdapter.getCount();
-                for (int i = 0; i < quantityProduct; i++){
-                    int idProduct = cartAdapter.getItem(i).getId();
-                    int quantity = cartAdapter.getItem(i).getQuantity();
-
-                    Quantity quantityItem = new Quantity(quantity);
-                    String url = WEBSITE_URL + idProduct + "/";
-                    // Edit product quantity
-                    final String token = sharedPreferences.getString("Token_Access", "");
-                    apiService.editProductQuantity(token, url, quantityItem).enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Log.e("update", "DONE");
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Log.e("update", t.getMessage());
-                        }
-                    });
-                }
+//                int quantityProduct = cartAdapter.getCount();
+//                for (int i = 0; i < quantityProduct; i++){
+//                    int idProduct = cartAdapter.getItem(i).getId();
+//                    int quantity = cartAdapter.getItem(i).getQuantity();
+//
+//                    Quantity quantityItem = new Quantity(quantity);
+//                    String url = WEBSITE_URL + idProduct + "/";
+//                    // Edit product quantity
+//                    final String token = sharedPreferences.getString("Token_Access", "");
+//                    apiService.editProductQuantity(token, url, quantityItem).enqueue(new Callback<ResponseBody>() {
+//                        @Override
+//                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                            Log.e("update", "DONE");
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                            Log.e("update", t.getMessage());
+//                        }
+//                    });
+//                }
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -171,7 +171,10 @@ public class CartFragment extends Fragment {
                                         public void onResponse(Call<Bill> call, Response<Bill> response) {
                                             if(response.isSuccessful()){
 
-                                               fragmentTransaction.detach(CartFragment.this).attach(CartFragment.this).commit();
+//                                               fragmentTransaction.detach(CartFragment.this).attach(CartFragment.this).commit();
+                                                resultCartList.clear();
+                                                cartAdapter.notifyDataSetChanged();
+                                                tvTotal.setText("0");
                                                 Toast.makeText(getContext(), "Payment successfull", Toast.LENGTH_SHORT).show();
 
                                             } else {
@@ -202,7 +205,7 @@ public class CartFragment extends Fragment {
                             }
                         });
                     }
-                }, 1000);
+                }, 1300);
             }
         });
 

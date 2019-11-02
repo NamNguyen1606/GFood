@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 import com.example.gfood.R;
 import com.example.gfood.activity.CartFragment;
 import com.example.gfood.activity.OnItemClick;
+import com.example.gfood.retrofit2.model.Quantity;
 import com.example.gfood.retrofit2.model.ResultCart;
 import com.example.gfood.retrofit2.service.APIService;
 import com.example.gfood.retrofit2.service.APIutils;
@@ -122,6 +123,7 @@ public class CartAdapter extends BaseAdapter {
         viewHolder.tvQuantity.setText(quantity + "");
         Picasso.with(context).load(WEBSITE + imgUrl).resize(200, 200).into(viewHolder.imgCartList);
 
+
         //Total all item in cart
         int total = 0;
         for(int i = 0; i < resultCartList.size(); i++){
@@ -145,12 +147,34 @@ public class CartAdapter extends BaseAdapter {
                 Log.e("Plus" + position, quantity + 1 +"");
                 finalViewHolder.tvQuantity.setText(quantity + 1 +"");
 
+                // Edit product quantity
+                int idProduct = resultCartList.get(position).getId();
+
+                Quantity quantityItem = new Quantity(resultCartList.get(position).getQuantity());
+                String url = WEBSITE + "api/item/" + idProduct + "/";
+
+                final String token = sharedPreferences.getString("Token_Access", "");
+                apiService.editProductQuantity(token, url, quantityItem).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Log.e("update", "DONE");
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e("update", t.getMessage());
+                    }
+                });
+
                 // Total
                 int total = getTotal();
                 int price = resultCartList.get(position).getPrice();
                 total = total + price;
                 setTotal(total);
                 onItemClick.itemQuantityClick(total);
+
+
+
             }
         });
 
@@ -172,6 +196,26 @@ public class CartAdapter extends BaseAdapter {
                     resultCartList.get(position).setQuantity(quantity - 1);
                     finalViewHolder.tvQuantity.setText(quantity - 1 +"");
                     finalViewHolder1.btnSub.setEnabled(true);
+
+                    // Edit product quantity
+                    int idProduct = resultCartList.get(position).getId();
+
+                    Quantity quantityItem = new Quantity(resultCartList.get(position).getQuantity());
+                    String url = WEBSITE + "api/item/" + idProduct + "/";
+
+                    final String token = sharedPreferences.getString("Token_Access", "");
+                    apiService.editProductQuantity(token, url, quantityItem).enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            Log.e("update", "DONE");
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Log.e("update", t.getMessage());
+                        }
+                    });
+
                     // Total
                     int total = getTotal();
                     int price = resultCartList.get(position).getPrice();
