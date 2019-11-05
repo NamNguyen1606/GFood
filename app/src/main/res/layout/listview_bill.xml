@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:layout_weight="25"
         android:orientation="horizontal"
-        android:background="#D8E4E7D9">
+        android:background="#2196F3">
 
         <TextView
             android:layout_width="0dp"
@@ -21,7 +21,8 @@
             android:gravity="center_horizontal"
             android:text="ID"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="#f000"/>
 
         <TextView
             android:id="@+id/tvLvBillId"
@@ -30,7 +31,8 @@
             android:layout_margin="3dp"
             android:layout_weight="15"
             android:gravity="center_horizontal"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:textColor="#f000"/>
     </LinearLayout>
 
     // TOTAL
@@ -48,7 +50,8 @@
             android:gravity="center_horizontal"
             android:text="Total"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="#f000"/>
 
         <TextView
             android:id="@+id/tvLvBillTotal"
@@ -57,7 +60,8 @@
             android:layout_margin="3dp"
             android:layout_weight="15"
             android:gravity="center_horizontal"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:textColor="#f000"/>
     </LinearLayout>
 
     // Create at
@@ -75,7 +79,8 @@
             android:gravity="center_horizontal"
             android:text="Create at"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="#f000"/>
 
         <TextView
             android:id="@+id/tvLvBillCreateAt"
@@ -84,7 +89,8 @@
             android:layout_margin="3dp"
             android:layout_weight="15"
             android:gravity="center_horizontal"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:textColor="#f000"/>
     </LinearLayout>
 
     // Status
@@ -102,7 +108,8 @@
             android:gravity="center_horizontal"
             android:text="Status"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="#f000"/>
 
         <TextView
             android:id="@+id/tvLvBillStatus"
@@ -111,7 +118,8 @@
             android:layout_margin="3dp"
             android:layout_weight="15"
             android:gravity="center_horizontal"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:textColor="#f000"/>
     </LinearLayout>
 
 
