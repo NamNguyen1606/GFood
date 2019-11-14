@@ -34,7 +34,6 @@ public class HomePageActivity extends AppCompatActivity {
 
         tabLayout.initialize(viewPager, getSupportFragmentManager(), fragmentList, savedInstanceState);
 
-
     }
 
 }

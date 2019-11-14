@@ -333,4 +333,10 @@ public class CartFragment extends Fragment {
         super.onStop();
         isRefresh = true;
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.e("ONPRODUCT", "DO");
+    }
 }

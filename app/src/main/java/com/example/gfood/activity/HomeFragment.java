@@ -55,7 +55,8 @@ public class HomeFragment extends Fragment {
     private RestaurantAdapter restaurantAdapter;
     private ProductAdapter productAdapter;
     public OnProductClick onProductClick;
-    private Fragment fragment;
+    private Fragment fragment1;
+    private Fragment fragment2;
     private FragmentTransaction fragmentTransaction;
     private View footerView;
     private boolean isloading = false;
@@ -86,11 +87,12 @@ public class HomeFragment extends Fragment {
         productAdapter = new ProductAdapter(getActivity(), R.layout.listview_product, productList);
         listView.setAdapter(productAdapter);
         productAdapter.notifyDataSetChanged();
+        productAdapter.productClick = onProductClick;
 
         mHandler = new mHandler();
         Context context = getContext();
         sharedPreferences = context.getSharedPreferences("Acount_info", Context.MODE_PRIVATE);
-        Log.e("Token Access: ", sharedPreferences.getString("Token_Access", ""));
+        Log.e("Token Access Home: ", sharedPreferences.getString("Token_Access", ""));
 
         apiService = APIutils.getAPIService();
 
@@ -187,13 +189,24 @@ public class HomeFragment extends Fragment {
         });
 
 
+        // Refresh Cart when product was added
         onProductClick = new OnProductClick() {
             @Override
             public void productItemClick() {
-                fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragment = getActivity().getSupportFragmentManager().getFragments().get(1);
-                fragmentTransaction.detach(fragment).attach(fragment).commit();
 
+                int CartIndex = getActivity().getSupportFragmentManager().getFragments().indexOf(CartFragment.class);
+                fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                int size = getActivity().getSupportFragmentManager().getFragments().size();
+                // Find CartFragment
+                for (int i = 0; i < size; i++){
+                    fragment1 = getActivity().getSupportFragmentManager().getFragments().get(i);
+                    if (fragment1 instanceof CartFragment) {
+                        Log.e("check", "onProductClick: Right");
+                        fragmentTransaction.detach(fragment1).attach(fragment1).commit();
+                    } else {
+                        Log.e("check", "onProductClick: Wrong");
+                    }
+                }
             }
         };
 
