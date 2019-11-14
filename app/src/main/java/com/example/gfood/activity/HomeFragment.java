@@ -276,7 +276,7 @@ public class HomeFragment extends Fragment {
                     if(response.body().getNext() == null){
                         limitData = true;
                         listView.removeFooterView(footerView);
-                    } else {
+                    }
                         try{
                             ResultProduct resultProduct = response.body().getResults().get(i);
                             productList.add(resultProduct);
@@ -284,7 +284,7 @@ public class HomeFragment extends Fragment {
                         } catch (Exception e){
                         }
                         
-                    }
+
 
                 }
             }

@@ -103,4 +103,5 @@ public class ResultBill {
     public void setUser(User user) {
         this.user = user;
     }
+
 }

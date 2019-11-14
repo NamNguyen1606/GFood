@@ -66,8 +66,8 @@ public interface APIService {
     Call<Bill> payment(@Header("Authorization") String token);
 
     // Get bill
-    @GET("api/bill/")
-    Call<Bill> getBill(@Header("Authorization") String token);
+    @GET
+    Call<Bill> getBill(@Header("Authorization") String token, @Url String url);
 
 
     // get list product in cart
